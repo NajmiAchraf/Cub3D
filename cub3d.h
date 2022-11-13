@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/12 17:54:03 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/13 16:41:37 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <complex.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <math.h>
 # include "Libft/libft.h"
 # include "get_next_line/get_next_line.h"
 

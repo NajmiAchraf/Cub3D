@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/13 14:12:48 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/13 16:41:56 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,7 @@ void line(t_var *var)
 	for (x=var->ply_x; x < RESOLUTION; x++){
 		for (y=var->ply_y; y < (var->ply_y + 1); y++){
 			if (get_map_index(var, x - MAP_POSITION ,y - MAP_POSITION, MAP_RESOLUTION) == '0')
-				put_pixel_to_image(var, x, y, RED);
+				put_pixel_to_image(var, cos(x), sin(y), RED);
 			else
 				return;
 		}
