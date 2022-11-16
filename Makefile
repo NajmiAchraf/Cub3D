@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/12 15:06:56 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/16 14:15:29 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,8 @@ C_RES = \033[0m
 %.o: %.c
 	@gcc $(CFLAGS) $(MLXINC) -c $^ -o $@
 
-all : $(NAME)
+all : $(NAME) run
+
 
 $(NAME) : $(OBJ)
 	$(ALLIBFT)
@@ -98,3 +99,7 @@ re : fclean all
 
 bonus :
 	@echo "$(C_RED)[CUB3D BONUS NOT EXIST YET!]$(C_RES)"
+
+run :
+	@echo "$(C_L_BLUE)[RUN CUB3D!]$(C_RES)"
+	@./cub3d

@@ -6,19 +6,26 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/13 16:41:56 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/16 19:35:59 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char get_map_index(t_var *var, int i, int j, int rslt)
+void	mlp_rotation_matrix(double angle, double *x, double *y){
+	double tmp = *x;
+
+	*x = cos(angle) * *x - sin(angle) * *y;
+	*y = sin(angle) * tmp + cos(angle) * *y;
+}
+
+char get_map_index(t_var *var, int i, int j)
 {
 	int c;
 
 	c = '_';
-	if (var->map[(j / var->im) % rslt])
-		c = var->map[(j / var->im) % rslt][(i / var->re) % rslt];
+	if (var->map[(j / var->im)])
+		c = var->map[(j / var->im)][(i / var->re)];
 	return (c);
 }
 
@@ -30,73 +37,134 @@ void set_pos_player(t_var *var)
 
 void event(t_var *var)
 {
-	if (var->move[0] == KY_LEFT)
+	if (var->move[0] == KY_A || var->move[0] == KY_D)
 	{
-		if (get_map_index(var, var->ply_x - var->step - MAP_POSITION, var->ply_y - MAP_POSITION, var->k) == '0')
-		// if (var->ply_x >= 0)
-			var->ply_x -= var->step;
-		// if (var->ply_x == -var->step)
-		// 	var->ply_x = 0;
+		if (get_map_index(var, var->ply_x - (var->vy * var->step) - MAP_POSITION, var->ply_y + (var->vx * var->step) - MAP_POSITION) == '0')
+			var->ply_x -= var->vy * var->step;
+			var->ply_y += var->vx * var->step;
 	}
-	else if (var->move[0] == KY_RIGHT)
+	if (var->move[1] == KY_S || var->move[1] == KY_W)
 	{
-		if (get_map_index(var, var->ply_x + var->step - MAP_POSITION, var->ply_y - MAP_POSITION, var->k) == '0')
-		// if (var->ply_x <= RESOLUTION)
-			var->ply_x += var->step;
-		// if (var->ply_x + var->k == RESOLUTION + var->step)
-		// 	var->ply_x = RESOLUTION - var->k;
+		if (get_map_index(var, var->ply_x + (var->vx * var->step) - MAP_POSITION, var->ply_y + (var->vy * var->step) - MAP_POSITION) == '0')
+			var->ply_x += var->vx * var->step;
+			var->ply_y += var->vy * var->step;
 	}
-	if (var->move[1] == KY_DOWN)
+	if (var->move[2] == KY_LEFT)
 	{
-		if (get_map_index(var, var->ply_x - MAP_POSITION, var->ply_y + var->step - MAP_POSITION, var->k) == '0')
-		// if (var->ply_y <= RESOLUTION)
-			var->ply_y += var->step;
-		// if (var->ply_y + var->k == RESOLUTION + var->step)
-		// 	var->ply_y = RESOLUTION - var->k;
+		mlp_rotation_matrix(-ROTATION_SPEED, &var->vx, &var->vy);
 	}
-	else if (var->move[1] == KY_UP)
+	else if (var->move[2] == KY_RIGHT)
 	{
-		if (get_map_index(var, var->ply_x - MAP_POSITION, var->ply_y - var->step - MAP_POSITION, var->k) == '0')
-		// if (var->ply_y >= 0)
-			var->ply_y -= var->step;
-		// if (var->ply_y == -var->step)
-		// 	var->ply_y = 0;
+		mlp_rotation_matrix(ROTATION_SPEED, &var->vx, &var->vy);
 	}
+}
+
+double	dda(t_var *var, double vx, double vy){
+	double	delta_x;
+	double	delta_y;
+	if (vx)
+		delta_x = 1 / fabs(vx * (var->pos_x / var->ply_x));
+	else
+		delta_x = 1e30;
+
+	if (vy)
+		delta_y = 1 / fabs(vy * (var->pos_y / var->ply_y));
+	else
+		delta_y = 1e30;
+
+	int step_x;
+	int	step_y;
+	int	map_x;
+	int	map_y;
+	double	dist_x;
+	double	dist_y;
+
+	delta_x *= var->re;
+	delta_y *= var->im;
+
+	step_x = -1;
+	step_y = -1;
+	if (var->vx > 0)
+	{
+		step_x = 1;
+		map_x = (int)var->pos_x + 1;
+		dist_x = (map_x - var->pos_x) * delta_x;
+	}
+	else if (var->vx <= 0)
+	{
+		map_x = (int)var->pos_x;
+		dist_x = (var->pos_x - map_x) * delta_x;
+	}
+		
+	if (var->vy > 0)
+	{
+		step_y = 1;
+		map_y = (int)var->pos_y + 1;
+		dist_y = (map_y - var->pos_y) * delta_y;
+	}
+	else if (var->vy <= 0){
+		map_y = (int)var->pos_y;
+		dist_y = (var->pos_y - map_y) * delta_y;
+	}
+	
+	int side;
+	while (1)
+	{
+		// printf("%d, %d\n", map_x, map_y);
+		if (dist_x < dist_y){
+			dist_x += delta_x;
+			map_x += step_x;
+			side = 1;
+		}
+		else{
+			dist_y += delta_y;
+			map_y += step_y;
+			side = 2;
+		}
+		if (var->map[map_y][map_x] == '1')
+			break;
+	}
+	double dist = 0;
+	if (side == 1){
+		dist =  (dist_x - delta_x);
+	}
+	else{
+		dist = (dist_y - delta_y);
+	}
+
+	printf("%f %d %f %f -- %d %d\n", dist, var->re, dist * var->re, var->ply_x, (int)var->pos_x, (int)var->pos_y);
+	return (dist);
 }
 
 void	execute(int keycode, t_var *var)
 {
-	if (keycode == KY_LEFT)
+	if (keycode == KY_A)
 	{
-		var->move[0] = KY_LEFT;
-		/*if (var->ply_x >= 0)
-			var->ply_x -= var->step;
-		if (var->ply_x == -var->step)
-			var->ply_x = 0;*/
+		var->move[0] = KY_A;
+		var->step = -STEP;
+	}
+	else if (keycode == KY_D)
+	{
+		var->move[0] = KY_D;
+		var->step = STEP;
+	}
+	else if (keycode == KY_S)
+	{
+		var->move[1] = KY_S;
+		var->step = -STEP;
+	}
+	else if (keycode == KY_W)
+	{
+		var->move[1] = KY_W;
+		var->step = STEP;
+	}
+	else if (keycode == KY_LEFT)
+	{
+		var->move[2] = KY_LEFT;
 	}
 	else if (keycode == KY_RIGHT)
 	{
-		var->move[0] = KY_RIGHT;
-		/* if (var->ply_x <= RESOLUTION)
-			var->ply_x += var->step;
-		if (var->ply_x + var->k == RESOLUTION + var->step)
-			var->ply_x = RESOLUTION - var->k; */
-	}
-	else if (keycode == KY_DOWN)
-	{
-		var->move[1] = KY_DOWN;
-		/* if (var->ply_y <= RESOLUTION)
-			var->ply_y += var->step;
-		if (var->ply_y + var->k == RESOLUTION + var->step)
-			var->ply_y = RESOLUTION - var->k; */
-	}
-	else if (keycode == KY_UP)
-	{
-		var->move[1] = KY_UP;
-		/* if (var->ply_y >= 0)
-			var->ply_y -= var->step;
-		if (var->ply_y == -var->step)
-			var->ply_y = 0; */
+		var->move[2] = KY_RIGHT;
 	}
 	// else if (keycode == KY_SPACE)
 	// 	init(var);
@@ -115,11 +183,12 @@ void	execute(int keycode, t_var *var)
 int	downbind(int keycode, t_var *var)
 {
 	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_DOWN
-		|| keycode == KY_UP || keycode == KY_SPACE || keycode == KY_PLUS
-		|| keycode == KY_MINUS)
+		|| keycode == KY_UP|| keycode == KY_A || keycode == KY_S || keycode == KY_D
+		|| keycode == KY_W || keycode == KY_SPACE || keycode == KY_PLUS || keycode == KY_MINUS)
 		execute(keycode, var);
 	else if (keycode == KY_C)
 		return (0);
+	// printf("%d\n", keycode);
 	return (0);
 }
 
@@ -130,10 +199,12 @@ int	upbind(int keycode, t_var *var)
 		mlx_destroy_window(var->mlx, var->win);
 		exit(1);
 	}
-	if (keycode == KY_LEFT || keycode == KY_RIGHT)
+	if (keycode == KY_A || keycode == KY_D)
 		var->move[0] = -1;
-	if (keycode == KY_DOWN || keycode == KY_UP)
+	if (keycode == KY_S || keycode == KY_W)
 		var->move[1] = -1;
+	if (keycode == KY_LEFT || keycode == KY_RIGHT)
+		var->move[2] = -1;
 	return (0);
 }
 
@@ -211,8 +282,8 @@ int	check_args(t_var *var, int ac, char **av)
 
 void	init(t_var *var)
 {
-	var->k = MAP_RESOLUTION / 50;
-	var->step = 5;
+	var->ply_size = 1;
+	var->step = STEP;
 	var->speed = 2;
 	var->col = 1;
 	var->zoom = RESOLUTION / 4.;
@@ -221,6 +292,8 @@ void	init(t_var *var)
 	var->ply_y = 0;
 	var->pos_x = 0;
 	var->pos_y = 0;
+	var->vx = 0.5 * 0.33f;
+	var->vy = 0.5 * 0.33f;
 	var->map = malloc(sizeof(char *) * 7);
 	int fd = open("map.cub", 0666);
 	var->map[0] = get_next_line(fd);
@@ -232,41 +305,82 @@ void	init(t_var *var)
 	var->map[6] = NULL;
 	var->move[0] = -1;
 	var->move[1] = -1;
+	var->move[2] = -1;
 	close(fd);
 }
 
+void	draw_line(t_var *var, double x_0, double y_0, double slope){//), double len){
+	/*double y;
+	double step;
+	double x_n;
+
+	// if (get_map_index(var, x - MAP_POSITION ,y - MAP_POSITION) == '0')
+		x_n = sqrt(len / (1 + slope * slope)) + x_0;
+	step = (x_n - x_0) / 1000;
+	for (double x = x_0; x < x_n; x += step) {
+		y = slope * (x - x_0) + y_0;
+		// if (get_map_index(var, x - MAP_POSITION ,y - MAP_POSITION, MAP_RESOLUTION) == '0')
+			put_pixel_to_image(var, x, y, RED);
+		// else
+		// 	return;
+	}*/
+
+	double r;
+	double x;
+	double y;
+	double len;
+
+	// for (double r = 0; r < 100; r += 0.1){
+	// 	x = cos(slope) * r;
+	// 	y = sin(slope) * r;
+	// 	if (get_map_index(var, x_0 + x - MAP_POSITION, x_0 + x - MAP_POSITION) == '1')
+	// 	{
+	// 		len = r - 1;
+	// 		break;
+	// 	}
+	// }
+
+	for (double r = 0; r < dda(var, var->vx, var->vy); r += 0.1){
+		x = cos(slope) * r;
+		y = sin(slope) * r;
+		put_pixel_to_image(var, x_0 + x, y_0 + y, RED);
+	}
+}
 
 void line(t_var *var)
 {
 	int x, y, nrx, nry;
 	nrx = (MAP_RESOLUTION) - var->ply_x; // * cos(angle));
 	nry = var->ply_y + (MAP_RESOLUTION); // * sin(angle));
-	
+
+	nrx = var->ply_x + cos(M_PI / 2) * 40;
+	nry = var->ply_y + sin(M_PI / 2) * 40;
+
 	for (x=var->ply_x; x < RESOLUTION; x++){
 		for (y=var->ply_y; y < (var->ply_y + 1); y++){
-			if (get_map_index(var, x - MAP_POSITION ,y - MAP_POSITION, MAP_RESOLUTION) == '0')
-				put_pixel_to_image(var, cos(x), sin(y), RED);
+			if (get_map_index(var, x - MAP_POSITION ,y - MAP_POSITION) == '0')
+				put_pixel_to_image(var, x + cos(M_PI / 2) * 40, y + sin(M_PI / 2) * 40, RED);
 			else
 				return;
 		}
 	}
 }
 
+
 void player(t_var *var)
 {
 	int x, y;
-	for (x=var->ply_x - (var->k / 2); x < ((var->k / 2) + var->ply_x); x++){
-		for (y=var->ply_y - (var->k / 2); y < ((var->k / 2) + var->ply_y); y++){
+	for (x=var->ply_x - (var->ply_size / 2); x < ((var->ply_size / 2) + var->ply_x); x++){
+		for (y=var->ply_y - (var->ply_size / 2); y < ((var->ply_size / 2) + var->ply_y); y++){
 			put_pixel_to_image(var, x, y, WHITE);
 		}
 	}
-	// for (x=var->ply_x; x < (10 + var->ply_x); x++){
-	// 	for (y=var->ply_y; y < (10 + var->ply_y); y++){
-	// 		put_pixel_to_image(var, x, y, 0x00ffffff);
-	// 	}
-	// }
-	line(var);
+	// line(var);
+	M_PI;
+	M_PI_2;
+	M_PI_4;
 	set_pos_player(var);
+	draw_line(var, var->ply_x, var->ply_y, atan2(var->vy, var->vx));//, 100);
 	// printf("x = %lf,y = %lf\n", var->pos_x, var->pos_y);
 }
 
@@ -276,8 +390,8 @@ void point(t_var *var)
 	char c;
 	for (i=0; i < MAP_RESOLUTION; i++) {
 		for (j=0; j < MAP_RESOLUTION; j++) {
-			c = get_map_index(var, i ,j, MAP_RESOLUTION);
-			// c = var->map[(j / var->im) % MAP_RESOLUTION][(i / var->re) % MAP_RESOLUTION];
+			c = get_map_index(var, i ,j);
+			// c = var->map[(j / var->im)][(i / var->re)];
 			if (c == '1')
 				put_pixel_to_image(var, i + MAP_POSITION, j + MAP_POSITION, 0x00abcdef);
 			else if (c == '0' || c == 'N')
@@ -291,11 +405,11 @@ int plot(t_var *var)
 	int i, j;
 	char c;
 	reset_image(var);
-	// for (i=0; i < RESOLUTION; i += var->k) {
-	// 	// printf("(i / var->re) %% var->k == (%d / %d) %% %d = %d\n", i, var->re, var->k, (i / var->re) % var->k);
-	// 	for (j=0; j < RESOLUTION; j += var->k) {
-	// 		// printf("(j / var->im) %% var->k == (%d / %d) %% %d = %d\n", j, var->im, var->k, (j / var->im) % var->k);
-	// 		c = var->map[(j / var->im) % var->k][(i / var->re) % var->k];
+	// for (i=0; i < RESOLUTION; i += var->ply_size) {
+	// 	// printf("(i / var->re) %% var->ply_size == (%d / %d) %% %d = %d\n", i, var->re, var->ply_size, (i / var->re) % var->ply_size);
+	// 	for (j=0; j < RESOLUTION; j += var->ply_size) {
+	// 		// printf("(j / var->im) %% var->ply_size == (%d / %d) %% %d = %d\n", j, var->im, var->ply_size, (j / var->im) % var->ply_size);
+	// 		c = var->map[(j / var->im) % var->ply_size][(i / var->re) % var->ply_size];
 	// 		if (c == '1')
 	// 			squar(var, i, j, 0x00abcdef);
 	// 		else if (c == '0' || c == 'N')
@@ -315,21 +429,22 @@ int plotinit(t_var *var)
 	char c;
 	var->re = MAP_RESOLUTION / (ft_strlen(var->map[0]) - 1);
 	var->im = MAP_RESOLUTION / 6;
-	// for (i=0; i < RESOLUTION; i += var->k) {
-	// 	for (j=0; j < RESOLUTION; j += var->k) {
-	// 		c = var->map[(j / var->im) % var->k][(i / var->re) % var->k];
+	printf("re = %d || im = %d\n", var->re, var->im);
+	// for (i=0; i < RESOLUTION; i += var->ply_size) {
+	// 	for (j=0; j < RESOLUTION; j += var->ply_size) {
+	// 		c = var->map[(j / var->im) % var->ply_size][(i / var->re) % var->ply_size];
 	// 		if (c == 'N')
 	// 		{
 	// 			var->ply_x = i;
 	// 			var->ply_y = j;
-	// 			var->map[(j / var->im) % var->k][(i / var->re) % var->k] = '0';
+	// 			var->map[(j / var->im) % var->ply_size][(i / var->re) % var->ply_size] = '0';
 	// 			return 0;
 	// 		}
 	// 	}
 	// }
 	for (i=0; i < MAP_RESOLUTION; i++) {
 		for (j=0; j < MAP_RESOLUTION; j++) {
-			c = get_map_index(var, i ,j, MAP_RESOLUTION);
+			c = get_map_index(var, i ,j);
 			if (c == 'N')
 			{
 				var->ply_x = i + MAP_POSITION;

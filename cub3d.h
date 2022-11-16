@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/13 16:41:37 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/16 19:12:37 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ keyboard binds
 # define CK_UP 4
 # define CK_DOWN 5
 
+# define ROTATION_SPEED 0.09
+
 # ifdef __linux__
 #  define KY_LEFT 65361
 #  define KY_RIGHT 65363
@@ -50,6 +52,10 @@ keyboard binds
 #  define KY_RIGHT 124
 #  define KY_DOWN 125
 #  define KY_UP 126
+#  define KY_A 0
+#  define KY_D 2
+#  define KY_S 1
+#  define KY_W 13
 #  define KY_PLUS 69
 #  define KY_MINUS 78
 #  define KY_SPACE 49
@@ -66,8 +72,9 @@ enum {
 	ON_EXPOSE = 12,
 	ON_DESTROY = 17,
 	RESOLUTION = 1000,
-	MAP_RESOLUTION = 800,
+	MAP_RESOLUTION = 1000,
 	MAP_POSITION = RESOLUTION - MAP_RESOLUTION,
+	STEP = 10,
 	WHITE = 0x00ffffff,
 	BLACK = 0x00000000,
 	RED = 0x00ff0000,
@@ -88,13 +95,15 @@ typedef struct s_var
 	int				endian;
 	char			*dst;
 
-	int				k;
+	int				ply_size;
 	int				re;
 	int				im;
 	double			ply_x;
 	double			ply_y;
 	double			pos_x;
 	double			pos_y;
+	double 			vx;
+	double			vy;
 	double			speed;
 	double			zoom;
 	double			step;
@@ -107,7 +116,7 @@ typedef struct s_var
 	int				nbfc;
 	int				col;
 
-	int				move[2];
+	int				move[3];
 
 }					t_var;
 
