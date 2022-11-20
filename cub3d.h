@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/16 19:12:37 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/20 18:58:03 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ keyboard binds
 # define CK_UP 4
 # define CK_DOWN 5
 
-# define ROTATION_SPEED 0.09
+# define ROTATION_SPEED 0.02
+# define SCALE 50
 
 # ifdef __linux__
 #  define KY_LEFT 65361
@@ -74,7 +75,8 @@ enum {
 	RESOLUTION = 1000,
 	MAP_RESOLUTION = 1000,
 	MAP_POSITION = RESOLUTION - MAP_RESOLUTION,
-	STEP = 10,
+	PLY_SIZE = 2,
+	SPEED = 2,
 	WHITE = 0x00ffffff,
 	BLACK = 0x00000000,
 	RED = 0x00ff0000,
@@ -95,22 +97,22 @@ typedef struct s_var
 	int				endian;
 	char			*dst;
 
-	int				ply_size;
-	int				re;
-	int				im;
 	double			ply_x;
 	double			ply_y;
 	double			pos_x;
 	double			pos_y;
+	double			plan_x;
+	double			plan_y;
 	double 			vx;
 	double			vy;
-	double			speed;
-	double			zoom;
-	double			step;
+	double			step_x;
+	double			step_y;
+	double			ray_dir_x;
+	double			ray_dir_y;
+
 
 	double			x;
 	double			y;
-	double			scale;
 	double			zrtmp;
 	double			dist;
 	int				nbfc;
