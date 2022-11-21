@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/20 18:58:03 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/21 14:52:05 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,25 @@ enum {
 
 };
 
-typedef struct s_var
+typedef struct s_lx
 {
 	void			*mlx;
 	void			*win;
 	void			*img;
 	char			*addr;
-	char			**map;
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
 	char			*dst;
+}				t_lx;
 
+typedef struct s_pars
+{
+	char			**map;
+}				t_pars;
+
+typedef struct s_player
+{
 	double			ply_x;
 	double			ply_y;
 	double			pos_x;
@@ -109,16 +116,14 @@ typedef struct s_var
 	double			step_y;
 	double			ray_dir_x;
 	double			ray_dir_y;
-
-
-	double			x;
-	double			y;
-	double			zrtmp;
-	double			dist;
-	int				nbfc;
-	int				col;
-
 	int				move[3];
+}				t_player;
+
+typedef struct s_var
+{
+	t_lx			*lx;
+	t_pars			*pars;
+	t_player		*player;
 
 }					t_var;
 
