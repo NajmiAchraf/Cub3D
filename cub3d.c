@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/21 14:55:18 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/21 20:36:52 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,49 @@ char	get_map_index(t_var *var, double x, double y)
 	int c;
 
 	c = '_';
-	y = y / SCALE;
-	x = x / SCALE;
 	if (var->pars->map[(int)y])
 		c = var->pars->map[(int)y][(int)x];
 	return (c);
 }
 
-void	set_pos_player(t_var *var)
+char	gmie(t_var *var, double x, double to_x, double y, double to_y)
 {
-	var->player->pos_x = var->player->ply_x / SCALE;
-	var->player->pos_y = var->player->ply_y / SCALE;
+	char	c;
+	double	i;
+	double	j;
+	double	dx = (to_x - x) / 10;
+	double	dy = (to_y - y) / 10;
+
+	printf("dx = %lf	||	", dx);
+	printf("dy = %lf\n", dy);
+	printf("start==========================================\n");
+	c = '_';
+
+	while (x + i < to_x || y + j < to_y)
+	{
+		c = get_map_index(var, x + i, y + j);
+		if (c == '1')
+			return (c);
+		i += dx;
+		j += dy;
+	}
+	// for (i = dx; x + i < to_x; i += dx)
+	// {
+	// 	for (j = dy; y + j < to_y; j += dy)
+	// 	{
+	// 		c = get_map_index(var, x + i, y + j);
+	// 		// printf("x + i = %lf	||	", x + i);
+	// 		// printf("y + j = %lf\n", y + j);
+	// 		// printf("c = %c\n", c);
+	// 		if (c == '1')
+	// 		{
+	// 			printf("end------------------------------------------\n");
+	// 			return (c);
+	// 		}
+	// 	}
+	// }
+	printf("------------------------------------------end\n");
+	return (c);
 }
 
 // Digital differential analyzer
@@ -47,12 +79,12 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	// double len_ray = sqrt(vx * vx + vy *vy);
 	double len_ray = 1; // is better for raycasting
 	if (vx)
-		delta_x = len_ray / fabs(vx);//* (var->player->pos_x / var->player->ply_x));
+		delta_x = len_ray / fabs(vx);
 	else
 		delta_x = 1e30;
 
 	if (vy)
-		delta_y = len_ray / fabs(vy);//* (var->player->pos_y / var->player->ply_y));
+		delta_y = len_ray / fabs(vy);
 	else
 		delta_y = 1e30;
 
@@ -91,7 +123,6 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	int side;
 	while (1)
 	{
-		// printf("%d, %d\n", map_x, map_y);
 		if (dist_x < dist_y){
 			dist_x += delta_x;
 			map_x += step_x;
@@ -102,13 +133,8 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 			map_y += step_y;
 			side = 2;
 		}
-		// printf("%d %d\n", map_y, map_x);
 		if (var->pars->map[map_y][map_x] == '1')
-		{
-			// printf("map_y = %d || map_x = %d || var->pars->map[%d][%d] = %c\n", map_y, map_x, map_y, map_x, var->pars->map[map_y][map_x]);
-			// printf("poy = %.2f || pox = %.2f || var->pars->map[%d][%d] || vy = %.2f || vx = %.2f\n", var->player->pos_y, var->player->pos_x, map_y, map_x, var->player->vy, var->player->vx);
 			break;
-		}
 	}
 	double dist = 0;
 	if (side == 1){
@@ -117,47 +143,88 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	else{
 		dist = (dist_y - delta_y);
 	}
-
-	// printf("%f %d %f %f -- %d %d\n", dist, var->player->re, dist * var->player->re, var->player->ply_x, (int)var->player->pos_x, (int)var->player->pos_y);
 	return (dist);
 }
 
 void	event(t_var *var)
 {
+	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
+	{
+		if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
+		{
+			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
+			var->ply->pos_y += var->ply->vx * var->ply->step_x;
+		}
+		else if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y) == '0')
+			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
+		else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
+			var->ply->pos_y += var->ply->vx * var->ply->step_x;
+	}
+	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
+	{
+		if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
+		{
+			var->ply->pos_x += var->ply->vx * var->ply->step_y;
+			var->ply->pos_y += var->ply->vy * var->ply->step_y;
+		}
+		else if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y) == '0')
+			var->ply->pos_x += var->ply->vx * var->ply->step_y;
+		else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
+			var->ply->pos_y += var->ply->vy * var->ply->step_y;
+	}
+	if (var->ply->move[2] == KY_LEFT)
+	{
+		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
+	}
+	else if (var->ply->move[2] == KY_RIGHT)
+	{
+		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
+	}
+}
 
-	if (var->player->move[0] == KY_A || var->player->move[0] == KY_D)
+void	event_n(t_var *var)
+{
+	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
 	{
-		if (get_map_index(var, var->player->ply_x - (var->player->vy * var->player->step_x), var->player->ply_y + (var->player->vx * var->player->step_x)) == '0')
+		// if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
+		if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y , var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
 		{
-			var->player->ply_x -= var->player->vy * var->player->step_x;
-			var->player->ply_y += var->player->vx * var->player->step_x;
+			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
+			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 		}
-		else if (get_map_index(var, var->player->ply_x - (var->player->vy * var->player->step_x), var->player->ply_y) == '0')
-			var->player->ply_x -= var->player->vy * var->player->step_x;
-		else if (get_map_index(var, var->player->ply_x, var->player->ply_y + (var->player->vx * var->player->step_x)) == '0')
-			var->player->ply_y += var->player->vx * var->player->step_x;
+		// else if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y) == '0')
+		else if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y, var->ply->pos_y) == '0')
+			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
+		// else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
+		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
+			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 	}
-	if (var->player->move[1] == KY_S || var->player->move[1] == KY_W)
+	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
 	{
-		if (get_map_index(var, var->player->ply_x + (var->player->vx * var->player->step_y), var->player->ply_y + (var->player->vy * var->player->step_y)) == '0')
+		// if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
+		if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
 		{
-			var->player->ply_x += var->player->vx * var->player->step_y;
-			var->player->ply_y += var->player->vy * var->player->step_y;
+			var->ply->pos_x += var->ply->vx * var->ply->step_y;
+			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 		}
-		else if (get_map_index(var, var->player->ply_x + (var->player->vx * var->player->step_y), var->player->ply_y) == '0')
-			var->player->ply_x += var->player->vx * var->player->step_y;
-		else if (get_map_index(var, var->player->ply_x, var->player->ply_y + (var->player->vy * var->player->step_y)) == '0')
-			var->player->ply_y += var->player->vy * var->player->step_y;
+		// else if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y) == '0')
+		else if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y) == '0')
+			var->ply->pos_x += var->ply->vx * var->ply->step_y;
+		// else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
+		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
+			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 	}
-	if (var->player->move[2] == KY_LEFT)
+	if (var->ply->move[2] == KY_LEFT)
 	{
-		mlp_rotation_matrix(ROTATION_SPEED, &var->player->vx, &var->player->vy);
-		mlp_rotation_matrix(ROTATION_SPEED, &var->player->plan_x, &var->player->plan_y);
+		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
 	}
-	else if (var->player->move[2] == KY_RIGHT)
+	else if (var->ply->move[2] == KY_RIGHT)
 	{
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->player->vx, &var->player->vy);
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->player->plan_x, &var->player->plan_y);
+		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
 	}
 }
 
@@ -165,43 +232,43 @@ void	execute(int keycode, t_var *var)
 {
 	if (keycode == KY_A)
 	{
-		var->player->move[0] = KY_A;
-		var->player->step_x = -SPEED;
+		var->ply->move[0] = KY_A;
+		var->ply->step_x = -SPEED;
 	}
 	else if (keycode == KY_D)
 	{
-		var->player->move[0] = KY_D;
-		var->player->step_x = SPEED;
+		var->ply->move[0] = KY_D;
+		var->ply->step_x = SPEED;
 	}
 	else if (keycode == KY_S)
 	{
-		var->player->move[1] = KY_S;
-		var->player->step_y = -SPEED;
+		var->ply->move[1] = KY_S;
+		var->ply->step_y = -SPEED;
 	}
 	else if (keycode == KY_W)
 	{
-		var->player->move[1] = KY_W;
-		var->player->step_y = SPEED;
+		var->ply->move[1] = KY_W;
+		var->ply->step_y = SPEED;
 	}
 	else if (keycode == KY_LEFT)
 	{
-		var->player->move[2] = KY_LEFT;
+		var->ply->move[2] = KY_LEFT;
 	}
 	else if (keycode == KY_RIGHT)
 	{
-		var->player->move[2] = KY_RIGHT;
+		var->ply->move[2] = KY_RIGHT;
 	}
 	// else if (keycode == KY_SPACE)
 	// 	init(var);
-	// else if (keycode == KY_PLUS && var->player->zoom > 0.)
+	// else if (keycode == KY_PLUS && var->ply->zoom > 0.)
 	// {
-	// 	var->player->zoom *= var->player->speed;
-	// 	// var->player->step /= var->player->speed;
+	// 	var->ply->zoom *= var->ply->speed;
+	// 	// var->ply->step /= var->ply->speed;
 	// }
-	// else if (keycode == KY_MINUS && var->player->zoom >= RESOLUTION / 4.)
+	// else if (keycode == KY_MINUS && var->ply->zoom >= RESOLUTION / 4.)
 	// {
-	// 	var->player->zoom /= var->player->speed;
-	// 	// var->player->step *= var->player->speed;
+	// 	var->ply->zoom /= var->ply->speed;
+	// 	// var->ply->step *= var->ply->speed;
 	// }
 }
 
@@ -225,41 +292,41 @@ int	upbind(int keycode, t_var *var)
 		exit(1);
 	}
 	if (keycode == KY_A || keycode == KY_D)
-		var->player->move[0] = -1;
+		var->ply->move[0] = -1;
 	if (keycode == KY_S || keycode == KY_W)
-		var->player->move[1] = -1;
+		var->ply->move[1] = -1;
 	if (keycode == KY_LEFT || keycode == KY_RIGHT)
-		var->player->move[2] = -1;
+		var->ply->move[2] = -1;
 	return (0);
 }
 
 int	mouse_position(int x, int y, t_var *var)
 {
-	// var->player->x = get_pos(var, var->player->ply_x, x);
-	// var->player->y = get_neg(var, var->player->ply_y, y);
+	// var->ply->x = get_pos(var, var->ply->pos_x, x);
+	// var->ply->y = get_neg(var, var->ply->pos_y, y);
 	// show(var);
 	return (0);
 }
 
 int	mouse_zoom(int keycode, int x, int y, t_var *var)
 {
-	// if (keycode == CK_UP && var->player->zoom > 0.)
+	// if (keycode == CK_UP && var->ply->zoom > 0.)
 	// {
-	// 	var->player->zoom *= var->player->speed;
-	// 	// var->player->step /= var->player->speed;
+	// 	var->ply->zoom *= var->ply->speed;
+	// 	// var->ply->step /= var->ply->speed;
 	// }
-	// else if (keycode == CK_DOWN && var->player->zoom >= RESOLUTION / 4.)
+	// else if (keycode == CK_DOWN && var->ply->zoom >= RESOLUTION / 4.)
 	// {
-	// 	var->player->zoom /= var->player->speed;
-	// 	// var->player->step *= var->player->speed;
+	// 	var->ply->zoom /= var->ply->speed;
+	// 	// var->ply->step *= var->ply->speed;
 	// }
 	// if (keycode == CK_UP || keycode == CK_DOWN)
 	// {
-	// 	// var->player->trs_re = get_pos(var, var->player->ply_x, x);
-	// 	// var->player->trs_im = get_neg(var, var->player->ply_y, y);
-	// 	// var->player->scale = 1. / var->player->zoom;
-	// 	// var->player->ply_x = get_neg(var, var->player->trs_re, x);
-	// 	// var->player->ply_y = get_pos(var, var->player->trs_im, y);
+	// 	// var->ply->trs_re = get_pos(var, var->ply->pos_x, x);
+	// 	// var->ply->trs_im = get_neg(var, var->ply->pos_y, y);
+	// 	// var->ply->scale = 1. / var->ply->zoom;
+	// 	// var->ply->pos_x = get_neg(var, var->ply->trs_re, x);
+	// 	// var->ply->pos_y = get_pos(var, var->ply->trs_im, y);
 	// 	// show(var);
 	// 	return (0);
 	// }
@@ -302,7 +369,29 @@ void	draw_line(t_var *var, double x_0, double y_0, double slope, double len){
 	for (double r = 0; r < len; r += 0.1){
 		x = cos(slope) * r;
 		y = sin(slope) * r;
-		put_pixel_to_image(var, x_0 + x, y_0 + y, RED);
+		put_pixel_to_image(var, x_0 + x, y_0 + y, GREEN);
+	}
+}
+
+void	raycasting(t_var *var, double dda, int ray)
+{
+	double size;
+	int limit;
+	int a;
+	int b;
+
+	size =  ((double)RESOLUTION / dda);
+	limit = size / 2;
+	a = (RESOLUTION / 2) - limit;
+	b = (RESOLUTION / 2) + limit;
+	for (int y = 0; y < RESOLUTION; y++)
+	{
+		if (a <= y && y <= b)
+			put_pixel_to_image(var, ray, y, YELLOW);
+		else if (y < a)
+			put_pixel_to_image(var, ray, y, CYAN);
+		if (y > b)
+			put_pixel_to_image(var, ray, y, XCOL);
 	}
 }
 
@@ -314,13 +403,12 @@ void	projection(t_var *var)
 	for (size_t x = 0; x < RESOLUTION; x++)
 	{
 		X = ((2.0 * x) - RESOLUTION) / (double)RESOLUTION;
-		var->player->ray_dir_x = var->player->vx + (X * var->player->plan_x);
-		var->player->ray_dir_y = var->player->vy + (X * var->player->plan_y);
-		dist = dda(var, var->player->pos_x, var->player->pos_y, var->player->ray_dir_x, var->player->ray_dir_y) * SCALE;
-		draw_line(var, var->player->pos_x * SCALE, var->player->pos_y * SCALE, atan2(var->player->ray_dir_y, var->player->ray_dir_x), dist);
+		var->ply->ray_dir_x = var->ply->vx + (X * var->ply->plan_x);
+		var->ply->ray_dir_y = var->ply->vy + (X * var->ply->plan_y);
+		dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
+		// draw_line(var, var->ply->pos_x * SCALE, var->ply->pos_y * SCALE, atan2(var->ply->ray_dir_y, var->ply->ray_dir_x), dist * SCALE);
+		raycasting(var, dist, x);
 	}
-	
-	
 }
 
 void	draw_squar(t_var *var, double x, double y, double size_x, double size_y, int color){
@@ -344,13 +432,11 @@ void	draw_the_map(t_var *var){
 
 void	draw_player(t_var *var)
 {
-	double	dist; 
-	set_pos_player(var);
-	draw_squar(var, (var->player->pos_x * SCALE) - PLY_SIZE, (var->player->pos_y * SCALE) - PLY_SIZE, PLY_SIZE*2, PLY_SIZE*2, RED);
+	double	dist;
+	draw_squar(var, (var->ply->pos_x * SCALE) - PLY_SIZE, (var->ply->pos_y * SCALE) - PLY_SIZE, PLY_SIZE*2, PLY_SIZE*2, GREEN);
 	// Digital differential analyzer
-	// dist = dda(var, var->player->pos_x, var->player->pos_y, var->player->vx, var->player->vy) * SCALE; 
-	// draw_line(var, (var->player->pos_x) * SCALE, (var->player->pos_y) * SCALE, atan2(var->player->vy, var->player->vx), dist);
-	projection(var);
+	dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy) * SCALE; 
+	draw_line(var, (var->ply->pos_x) * SCALE, (var->ply->pos_y) * SCALE, atan2(var->ply->vy, var->ply->vx), dist);
 }
 
 int	draw(t_var *var)
@@ -358,6 +444,7 @@ int	draw(t_var *var)
 	int i, j;
 	char c;
 	reset_image(var);
+	projection(var);
 	draw_the_map(var);
 	draw_player(var);
 	show_image(var);
@@ -372,9 +459,8 @@ int	draw_init(t_var *var)
 		for (x=0; var->pars->map[y][x]; x++) {
 			if (var->pars->map[y][x] == 'N')
 			{
-				var->player->ply_y = y * SCALE;
-				var->player->ply_x = x * SCALE;
-				set_pos_player(var);
+				var->ply->pos_y = y;
+				var->ply->pos_x = x;
 				var->pars->map[y][x] = '0';
 				return 0;
 			}
@@ -385,16 +471,14 @@ int	draw_init(t_var *var)
 
 void	init(t_var *var)
 {
-	var->player->step_x = SPEED;
-	var->player->step_y = SPEED;
-	var->player->ply_x = 0;
-	var->player->ply_y = 0;
-	var->player->pos_x = 0;
-	var->player->pos_y = 0;
-	var->player->vx = 1;
-	var->player->vy = 0;
-	var->player->plan_x = 0;
-	var->player->plan_y = 0.63;
+	var->ply->step_x = SPEED;
+	var->ply->step_y = SPEED;
+	var->ply->pos_x = 0;
+	var->ply->pos_y = 0;
+	var->ply->vx = 1;
+	var->ply->vy = 0;
+	var->ply->plan_x = 0;
+	var->ply->plan_y = 0.5;
 	var->pars->map = malloc(sizeof(char *) * 13);
 	int fd = open("map.cub", 0666);
 	var->pars->map[0] = get_next_line(fd);
@@ -410,9 +494,9 @@ void	init(t_var *var)
 	var->pars->map[10] = get_next_line(fd);
 	var->pars->map[11] = get_next_line(fd);
 	var->pars->map[12] = NULL;
-	var->player->move[0] = -1;
-	var->player->move[1] = -1;
-	var->player->move[2] = -1;
+	var->ply->move[0] = -1;
+	var->ply->move[1] = -1;
+	var->ply->move[2] = -1;
 	close(fd);
 }
 
@@ -421,9 +505,9 @@ int	main(int ac, char **av)
 	t_var	*var;
 
 	var = malloc(sizeof(t_var));
-	var->lx = malloc(sizeof(t_lx));
+	var->lx = malloc(sizeof(t_mlx));
 	var->pars = malloc(sizeof(t_pars));
-	var->player = malloc(sizeof(t_player));
+	var->ply = malloc(sizeof(t_player));
 	init(var);
 	var->lx->mlx = mlx_init();
 	var->lx->win = mlx_new_window(var->lx->mlx, RESOLUTION, RESOLUTION, "CUB3D");

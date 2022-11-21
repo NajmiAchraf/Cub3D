@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/21 14:52:05 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/21 20:39:10 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ keyboard binds
 # define CK_DOWN 5
 
 # define ROTATION_SPEED 0.02
-# define SCALE 50
+# define SCALE 20
+# define SPEED 0.05
 
 # ifdef __linux__
 #  define KY_LEFT 65361
@@ -73,59 +74,56 @@ enum {
 	ON_EXPOSE = 12,
 	ON_DESTROY = 17,
 	RESOLUTION = 1000,
-	MAP_RESOLUTION = 1000,
-	MAP_POSITION = RESOLUTION - MAP_RESOLUTION,
 	PLY_SIZE = 2,
-	SPEED = 2,
 	WHITE = 0x00ffffff,
 	BLACK = 0x00000000,
 	RED = 0x00ff0000,
 	GREEN = 0x0000ff00,
-	BLUE = 0x000000ff
+	BLUE = 0x000000ff,
+	CYAN = 0x00ABCDEF,
+	YELLOW = 0x00FEDCBA,
+	PISTASH = 0x00DCFEBA
 
 };
 
-typedef struct s_lx
+typedef struct s_mlx
 {
-	void			*mlx;
-	void			*win;
-	void			*img;
-	char			*addr;
-	int				bits_per_pixel;
-	int				line_length;
-	int				endian;
-	char			*dst;
-}				t_lx;
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	char	*dst;
+}			t_mlx;
 
 typedef struct s_pars
 {
-	char			**map;
-}				t_pars;
+	char	**map;
+}			t_pars;
 
 typedef struct s_player
 {
-	double			ply_x;
-	double			ply_y;
-	double			pos_x;
-	double			pos_y;
-	double			plan_x;
-	double			plan_y;
-	double 			vx;
-	double			vy;
-	double			step_x;
-	double			step_y;
-	double			ray_dir_x;
-	double			ray_dir_y;
-	int				move[3];
-}				t_player;
+	double	pos_x;
+	double	pos_y;
+	double	plan_x;
+	double	plan_y;
+	double 	vx;
+	double	vy;
+	double	step_x;
+	double	step_y;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		move[3];
+}			t_player;
 
 typedef struct s_var
 {
-	t_lx			*lx;
-	t_pars			*pars;
-	t_player		*player;
-
-}					t_var;
+	t_mlx		*lx;
+	t_pars		*pars;
+	t_player	*ply;
+}				t_var;
 
 void	show_help(void);
 void	show_control(void);
