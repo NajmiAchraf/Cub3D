@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/21 20:36:52 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/21 20:41:25 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,7 +391,7 @@ void	raycasting(t_var *var, double dda, int ray)
 		else if (y < a)
 			put_pixel_to_image(var, ray, y, CYAN);
 		if (y > b)
-			put_pixel_to_image(var, ray, y, XCOL);
+			put_pixel_to_image(var, ray, y, PISTASH);
 	}
 }
 
