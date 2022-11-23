@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/21 20:41:25 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/23 13:27:15 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,42 +33,56 @@ char	get_map_index(t_var *var, double x, double y)
 
 char	gmie(t_var *var, double x, double to_x, double y, double to_y)
 {
-	char	c;
-	double	i;
-	double	j;
-	double	dx = (to_x - x) / 10;
-	double	dy = (to_y - y) / 10;
+	double	i = 0;
+	double	j = 0;
+	double	dx = (to_x - x) / 1000;
+	double	dy = (to_y - y) / 1000;
 
 	printf("dx = %lf	||	", dx);
 	printf("dy = %lf\n", dy);
 	printf("start==========================================\n");
-	c = '_';
-
-	while (x + i < to_x || y + j < to_y)
+	if (dx >= 0 && dy >= 0)
 	{
-		c = get_map_index(var, x + i, y + j);
-		if (c == '1')
-			return (c);
-		i += dx;
-		j += dy;
+		while (x + i < to_x || y + j < to_y)
+		{
+			if (get_map_index(var, x + i, y + j) == '1')
+				break ;
+			i += dx;
+			j += dy;
+		}
 	}
-	// for (i = dx; x + i < to_x; i += dx)
-	// {
-	// 	for (j = dy; y + j < to_y; j += dy)
-	// 	{
-	// 		c = get_map_index(var, x + i, y + j);
-	// 		// printf("x + i = %lf	||	", x + i);
-	// 		// printf("y + j = %lf\n", y + j);
-	// 		// printf("c = %c\n", c);
-	// 		if (c == '1')
-	// 		{
-	// 			printf("end------------------------------------------\n");
-	// 			return (c);
-	// 		}
-	// 	}
-	// }
+	else if (dx <= 0 && dy >= 0)
+	{
+		while (x + i > to_x || y + j < to_y)
+		{
+			if (get_map_index(var, x + i, y + j) == '1')
+				break ;
+			i += dx;
+			j += dy;
+		}
+	}
+	else if (dx >= 0 && dy <= 0)
+	{
+		while (x + i < to_x || y + j > to_y)
+		{
+			if (get_map_index(var, x + i, y + j) == '1')
+				break ;
+			i += dx;
+			j += dy;
+		}
+	}
+	else if (dx <= 0 && dy <= 0)
+	{
+		while (x + i > to_x || y + j > to_y)
+		{
+			if (get_map_index(var, x + i, y + j) == '1')
+				break ;
+			i += dx;
+			j += dy;
+		}
+	}
 	printf("------------------------------------------end\n");
-	return (c);
+	return (get_map_index(var, x + i, y + j));
 }
 
 // Digital differential analyzer
@@ -146,7 +160,7 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	return (dist);
 }
 
-void	event(t_var *var)
+void	event_n(t_var *var)
 {
 	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
 	{
@@ -184,35 +198,29 @@ void	event(t_var *var)
 	}
 }
 
-void	event_n(t_var *var)
+void	event(t_var *var)
 {
 	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
 	{
-		// if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
 		if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y , var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
 		{
 			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
 			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 		}
-		// else if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y) == '0')
 		else if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y, var->ply->pos_y) == '0')
 			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
-		// else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
 		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
 			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 	}
 	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
 	{
-		// if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
 		if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
 		{
 			var->ply->pos_x += var->ply->vx * var->ply->step_y;
 			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 		}
-		// else if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y) == '0')
 		else if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y) == '0')
 			var->ply->pos_x += var->ply->vx * var->ply->step_y;
-		// else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
 		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
 			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 	}
@@ -382,12 +390,12 @@ void	raycasting(t_var *var, double dda, int ray)
 
 	size =  ((double)RESOLUTION / dda);
 	limit = size / 2;
-	a = (RESOLUTION / 2) - limit;
-	b = (RESOLUTION / 2) + limit;
+	a = ((double)RESOLUTION / 2) - limit;
+	b = ((double)RESOLUTION / 2) + limit;
 	for (int y = 0; y < RESOLUTION; y++)
 	{
 		if (a <= y && y <= b)
-			put_pixel_to_image(var, ray, y, YELLOW);
+			put_pixel_to_image(var, ray, y, CREAMY);
 		else if (y < a)
 			put_pixel_to_image(var, ray, y, CYAN);
 		if (y > b)
@@ -437,6 +445,36 @@ void	draw_player(t_var *var)
 	// Digital differential analyzer
 	dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy) * SCALE; 
 	draw_line(var, (var->ply->pos_x) * SCALE, (var->ply->pos_y) * SCALE, atan2(var->ply->vy, var->ply->vx), dist);
+	// printf("x = %lf,y = %lf\n", var->ply->pos_x, var->ply->pos_y);
+}
+
+void	sdraw_squar(t_var *var, double x, double y, double size_x, double size_y, int color){
+	for (int j = y; j < y + size_y - 1; j++){
+		for (int i = x; i < x + size_x - 1; i++){
+			put_pixel_to_image(var, i,j, color);
+		}
+	}
+}
+
+void	sdraw_the_map(t_var *var){
+	for (int y = 0; var->pars->map[y]; y++){
+		for (int x = 0; var->pars->map[y][x]; x++){
+			if (var->pars->map[y][x] == '1' && ((fabs(var->ply->pos_x - x)) * SCALE) < POS_PLY && ((fabs(var->ply->pos_y - y)) * SCALE) < POS_PLY)
+				draw_squar(var, (x - var->ply->pos_x) * SCALE + POS_PLY, (y - var->ply->pos_y) * SCALE + POS_PLY, SCALE, SCALE, WHITE);
+			else if (var->pars->map[y][x] == '0' && ((fabs(var->ply->pos_x - x)) * SCALE) < POS_PLY && ((fabs(var->ply->pos_y - y)) * SCALE) < POS_PLY)
+				draw_squar(var, (x - var->ply->pos_x) * SCALE + POS_PLY, (y - var->ply->pos_y) * SCALE + POS_PLY, SCALE, SCALE, BLUE);
+		}
+	}
+}
+
+void	sdraw_player(t_var *var)
+{
+	double	dist;
+	draw_squar(var, POS_PLY - PLY_SIZE, POS_PLY - PLY_SIZE, PLY_SIZE*2, PLY_SIZE*2, GREEN);
+	// Digital differential analyzer
+	// dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy) * SCALE; 
+	draw_line(var, POS_PLY, POS_PLY, atan2(var->ply->vy, var->ply->vx), 20);
+	// printf("x = %lf,y = %lf\n", var->ply->pos_x, var->ply->pos_y);
 }
 
 int	draw(t_var *var)
@@ -445,8 +483,10 @@ int	draw(t_var *var)
 	char c;
 	reset_image(var);
 	projection(var);
-	draw_the_map(var);
-	draw_player(var);
+	// draw_the_map(var);
+	// draw_player(var);
+	sdraw_the_map(var);
+	sdraw_player(var);
 	show_image(var);
 	event(var);
 	return (0);
@@ -479,25 +519,29 @@ void	init(t_var *var)
 	var->ply->vy = 0;
 	var->ply->plan_x = 0;
 	var->ply->plan_y = 0.5;
-	var->pars->map = malloc(sizeof(char *) * 13);
 	int fd = open("map.cub", 0666);
-	var->pars->map[0] = get_next_line(fd);
-	var->pars->map[1] = get_next_line(fd);
-	var->pars->map[2] = get_next_line(fd);
-	var->pars->map[3] = get_next_line(fd);
-	var->pars->map[4] = get_next_line(fd);
-	var->pars->map[5] = get_next_line(fd);
-	var->pars->map[6] = get_next_line(fd);
-	var->pars->map[7] = get_next_line(fd);
-	var->pars->map[8] = get_next_line(fd);
-	var->pars->map[9] = get_next_line(fd);
-	var->pars->map[10] = get_next_line(fd);
-	var->pars->map[11] = get_next_line(fd);
-	var->pars->map[12] = NULL;
+	char *line = get_next_line(fd);
+	int i = 0;
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+		i++;
+	}
+	var->pars->map = malloc(sizeof(char *) * (i + 1));
+	var->pars->map[i] = NULL;
+	close(fd);
+	fd = open("map.cub", 0666);
+	line = get_next_line(fd);
+	for (size_t j = 0; line; j++)
+	{
+		var->pars->map[j] = line;
+		line = get_next_line(fd);
+	}
+	close(fd);
 	var->ply->move[0] = -1;
 	var->ply->move[1] = -1;
 	var->ply->move[2] = -1;
-	close(fd);
 }
 
 int	main(int ac, char **av)

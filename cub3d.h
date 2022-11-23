@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/21 20:39:10 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/22 23:28:17 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,15 @@ enum {
 	ON_DESTROY = 17,
 	RESOLUTION = 1000,
 	PLY_SIZE = 2,
+	MAP_SIZE = 200,
+	POS_PLY = MAP_SIZE / 2,
 	WHITE = 0x00ffffff,
 	BLACK = 0x00000000,
 	RED = 0x00ff0000,
 	GREEN = 0x0000ff00,
 	BLUE = 0x000000ff,
 	CYAN = 0x00ABCDEF,
-	YELLOW = 0x00FEDCBA,
+	CREAMY = 0x00FEDCBA,
 	PISTASH = 0x00DCFEBA
 
 };

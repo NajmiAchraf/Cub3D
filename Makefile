@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/16 14:15:29 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/21 20:49:28 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ all : $(NAME) run
 $(NAME) : $(OBJ)
 	$(ALLIBFT)
 	$(ALLGNL)
-	@gcc $(CFLAGS) $(OBJ) $(ARLIB) $(ARGNL) $(MLXLIB) -o $(NAME)
+	@gcc $(CFLAGS) $(OBJ) $(ARLIB) $(ARGNL) $(MLXLIB) -O3 -o $(NAME)
 	@echo "$(C_GREEN)[CUB3D MANDATORY CREATED!]$(C_RES)"
 
 clean :
