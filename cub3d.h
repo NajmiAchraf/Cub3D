@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/22 23:28:17 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/24 13:33:48 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,13 @@ keyboard binds
 */
 
 # define KY_ESC 53
-# define KY_C 8
 
 # define CK_LEFT 1
 # define CK_UP 4
 # define CK_DOWN 5
 
 # define ROTATION_SPEED 0.02
-# define SCALE 20
+# define MOUSE_ROT_SPEED 0.0075
 # define SPEED 0.05
 
 # ifdef __linux__
@@ -43,9 +42,6 @@ keyboard binds
 #  define KY_RIGHT 65363
 #  define KY_DOWN 65364
 #  define KY_UP 65362
-#  define KY_PLUS 65451
-#  define KY_MINUS 65453
-#  define KY_SPACE 32
 #  define CK_RIGHT 3
 #  define CK_MIDDLE 2
 
@@ -58,9 +54,6 @@ keyboard binds
 #  define KY_D 2
 #  define KY_S 1
 #  define KY_W 13
-#  define KY_PLUS 69
-#  define KY_MINUS 78
-#  define KY_SPACE 49
 #  define CK_RIGHT 2
 #  define CK_MIDDLE 3
 # endif
@@ -75,7 +68,8 @@ enum {
 	ON_DESTROY = 17,
 	RESOLUTION = 1000,
 	PLY_SIZE = 2,
-	MAP_SIZE = 200,
+	SCALE = 10,
+	MAP_SIZE = SCALE * 20,
 	POS_PLY = MAP_SIZE / 2,
 	WHITE = 0x00ffffff,
 	BLACK = 0x00000000,
