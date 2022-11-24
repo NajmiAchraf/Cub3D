@@ -3,18 +3,29 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
+#    By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/21 20:49:28 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/24 15:48:55 by sriyani          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = cub3d
+NAME = cub3D
 
 CFLAGS = -fsanitize=address # -Wall -Werror -Wextra
 
-PARSE = 
+CC = cc 
+
+PARSE = \
+		./parsing/parsing.c\
+		./parsing/parsing_check.c\
+		./parsing/parsing_check1.c\
+		./parsing/parsing1.c\
+		./parsing/parsing2.c\
+		./parsing/parsing3.c\
+		./parsing/parsing4.c\
+		./parsing/parsing_utils.c\
+		./parsing/parsing_utils1.c\
 
 EXEC = \
 	./cub3d.c	\
@@ -44,6 +55,18 @@ FCLEANLIBFT = rm -f $(ARLIB)
 RELIBFT = make re -C $(LIBFT)
 
 #*******************************#
+#			LIBFT PLUS			#
+#*******************************#
+
+LIBPL = ./LibftPlus
+ARPLS = $(LIBPL)/libftplus.a
+ALLIBPL = make -C $(LIBPL)
+CLEANLIBPL = make clean -C $(LIBPL)
+FCLEANLIBPL = rm -f $(ARPLS)
+RELIBPL = make re -C $(LIBPL)
+
+
+#*******************************#
 #			GNL					#
 #*******************************#
 
@@ -70,19 +93,20 @@ C_RES = \033[0m
 .PHONY : all clean fclean re bonus
 
 %.o: %.c
-	@gcc $(CFLAGS) $(MLXINC) -c $^ -o $@
+	@$(CC) $(CFLAGS) $(MLXINC) -c $^ -o $@
 
 all : $(NAME) run
 
-
 $(NAME) : $(OBJ)
 	$(ALLIBFT)
+	$(ALLIBPL)
 	$(ALLGNL)
-	@gcc $(CFLAGS) $(OBJ) $(ARLIB) $(ARGNL) $(MLXLIB) -O3 -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(ARLIB) $(ARPLS) $(ARGNL) $(MLXLIB) -o $(NAME)
 	@echo "$(C_GREEN)[CUB3D MANDATORY CREATED!]$(C_RES)"
 
 clean :
 	@$(CLEANLIBFT)
+	@$(CLEANLIBPL)
 	@$(CLEANGNL)
 	@rm -f $(OBJ)
 	@echo "$(C_RED)[CUB3D OBJECTS DELETED!]$(C_RES)"
@@ -90,6 +114,8 @@ clean :
 fclean : clean
 	@$(FCLEANLIBFT)
 	@echo "$(C_RED)[LIBFT ARCHIVE DELETED!]$(C_RES)"
+	@$(FCLEANLIBPL)
+	@echo "$(C_RED)[LIBFT PLUS ARCHIVE DELETED!]$(C_RES)"
 	@$(FCLEANGNL)
 	@echo "$(C_RED)[GET NEXT LINE ARCHIVE DELETED!]$(C_RES)"
 	@rm -f $(NAME)
@@ -102,4 +128,4 @@ bonus :
 
 run :
 	@echo "$(C_L_BLUE)[RUN CUB3D!]$(C_RES)"
-	@./cub3d
+	@./cub3D map.cub

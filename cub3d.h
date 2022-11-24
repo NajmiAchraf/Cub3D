@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/24 13:33:48 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/24 15:25:44 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include <unistd.h>
 # include <stdio.h>
-# include <mlx.h>
-# include <math.h>
-# include <complex.h>
 # include <stdlib.h>
 # include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include "Libft/libft.h"
+# include "LibftPlus/libftplus.h"
 # include "get_next_line/get_next_line.h"
 
 /*
@@ -97,7 +97,36 @@ typedef struct s_mlx
 typedef struct s_pars
 {
 	char	**map;
-}			t_pars;
+	char	**hold;
+	int		flag;
+	int		map1;
+	char	**no;
+	char	**so;
+	char	**we;
+	char	**ea;
+	char	**f;
+	char	**c;
+	int		nn;
+	int		ss;
+	int		ww;
+	int		ee;
+	int		ff;
+	int		cc;
+	int		zero;
+	int		player;
+	int		one;
+	int		space;
+	int		line;
+}	t_pars;
+
+typedef struct s_text
+{
+	void	*img[4];
+	char	*ptr;
+	char	*bbp;
+	int		line_length;
+	int		endian;
+} 	t_text;
 
 typedef struct s_player
 {
@@ -117,9 +146,42 @@ typedef struct s_player
 typedef struct s_var
 {
 	t_mlx		*lx;
-	t_pars		*pars;
 	t_player	*ply;
+	t_pars		*pars;
+	t_text		*text;
 }				t_var;
+
+
+
+int		ft_atoi_plus(char *str);
+char	*ft_join(char *s1);
+void	ft_error_fd(int fd);
+void	ft_free(char **ptr);
+void	check_extension(int ac, char **av);
+void	ft_error(char *str);
+int		num_str(char **str);
+void	check_map_surrounded(t_var *var);
+void	valid_map_column1(t_var *var);
+void	valid_map_column(t_var *var);
+void	valid_map_line(t_var *var);
+void	check_map(t_var *var);
+int		lent_map(char *str);
+void	check_f_range(t_var *var, char *str);
+void	check_c_range(t_var *var, char *str);
+void	check_map2(t_var *var, int i, int j);
+void	fill_map(t_var *var, int i, int len);
+int		check_file2(t_var *var, int i, int j, int fd);
+int		check_file3(t_var *var, int i, int j, int len);
+int		check_file_no(t_var *var, int i, int j, int fd);
+int		check_file_so(t_var *var, int i, int j, int fd);
+int		check_file_we(t_var *var, int i, int j, int fd);
+int		check_file_ea(t_var *var, int i, int j, int fd);
+char	*fill_texture1(t_var *var, char *path);
+void	fill_textue(t_var	*var);
+void	parsing(t_var *var, int ac, char **av);
+
+
+
 
 void	show_help(void);
 void	show_control(void);

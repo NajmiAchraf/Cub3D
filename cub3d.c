@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/24 14:26:18 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/24 15:51:01 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -733,6 +733,29 @@ void	directions_player(t_var *var, char dir)
 		set_directions(var, -1, 0, 0, -0.5);
 }
 
+void	change_map(t_var *var, int x, int y)
+{
+	char *old;
+	char *new;
+	int	 i;
+
+	old = ft_strdup(var->pars->map[y]);
+	// free(var->pars->map[y]);
+	new = malloc((ft_strlen(old) + 1) * sizeof(char));
+	i = 0;
+	while (old[i])
+	{
+		if (i != x)
+			new[i] = old[i];
+		else if (i == x)
+			new[i] = '0';
+		i++;
+	}
+	new[i] = '\0';
+	var->pars->map[y] = new;
+	printf("%s", var->pars->map[y]);
+}
+
 void	player_set(t_var *var)
 {
 	int	x;
@@ -741,6 +764,7 @@ void	player_set(t_var *var)
 	y = 0;
 	while (var->pars->map[y])
 	{
+		printf("%s\n", var->pars->map[y]);
 		x = 0;
 		while (var->pars->map[y][x])
 		{
@@ -752,7 +776,8 @@ void	player_set(t_var *var)
 				var->ply->pos_y = y + 0.5;
 				var->ply->pos_x = x + 0.5;
 				directions_player(var, var->pars->map[y][x]);
-				var->pars->map[y][x] = '0';
+				change_map(var, x, y);
+				// var->pars->map[y][x] = '0';
 				return ;
 			}
 			x++;
@@ -782,26 +807,6 @@ void	init(t_var *var)
 	// var->ply->vy = 0;
 	// var->ply->plan_x = 0;
 	// var->ply->plan_y = 0.5;
-	int fd = open("map.cub", 0666);
-	char *line = get_next_line(fd);
-	int i = 0;
-	while (line)
-	{
-		free(line);
-		line = get_next_line(fd);
-		i++;
-	}
-	var->pars->map = malloc(sizeof(char *) * (i + 1));
-	var->pars->map[i] = NULL;
-	close(fd);
-	fd = open("map.cub", 0666);
-	line = get_next_line(fd);
-	for (size_t j = 0; line; j++)
-	{
-		var->pars->map[j] = line;
-		line = get_next_line(fd);
-	}
-	close(fd);
 	var->ply->move[0] = -1;
 	var->ply->move[1] = -1;
 	var->ply->move[2] = -1;
@@ -813,8 +818,9 @@ int	main(int ac, char **av)
 
 	var = malloc(sizeof(t_var));
 	var->lx = malloc(sizeof(t_mlx));
-	var->pars = malloc(sizeof(t_pars));
 	var->ply = malloc(sizeof(t_player));
+	parsing(var, ac, av);
+
 	init(var);
 	var->lx->mlx = mlx_init();
 	var->lx->win = mlx_new_window(var->lx->mlx, RESOLUTION, RESOLUTION, "CUB3D");
