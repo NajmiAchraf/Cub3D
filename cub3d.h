@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/24 15:25:44 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 13:11:10 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ enum {
 	ON_EXPOSE = 12,
 	ON_DESTROY = 17,
 	RESOLUTION = 1000,
-	PLY_SIZE = 2,
+	PLY_SIZE = 3,
 	SCALE = 10,
 	MAP_SIZE = SCALE * 20,
 	POS_PLY = MAP_SIZE / 2,
@@ -93,6 +93,36 @@ typedef struct s_mlx
 	int		endian;
 	char	*dst;
 }			t_mlx;
+
+typedef struct s_player
+{
+	double	pos_x;
+	double	pos_y;
+	double	plan_x;
+	double	plan_y;
+	double 	vx;
+	double	vy;
+	double	step_x;
+	double	step_y;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		move[3];
+}			t_player;
+
+typedef struct s_dda
+{
+	double	delta_x;
+	double	delta_y;
+	double	len_ray;
+	int step_x;
+	int	step_y;
+	int	map_x;
+	int	map_y;
+	double	dist_x;
+	double	dist_y;
+	int side;
+	double dist;
+}			t_dda;
 
 typedef struct s_pars
 {
@@ -128,25 +158,11 @@ typedef struct s_text
 	int		endian;
 } 	t_text;
 
-typedef struct s_player
-{
-	double	pos_x;
-	double	pos_y;
-	double	plan_x;
-	double	plan_y;
-	double 	vx;
-	double	vy;
-	double	step_x;
-	double	step_y;
-	double	ray_dir_x;
-	double	ray_dir_y;
-	int		move[3];
-}			t_player;
-
 typedef struct s_var
 {
 	t_mlx		*lx;
 	t_player	*ply;
+	t_dda		*dda;
 	t_pars		*pars;
 	t_text		*text;
 }				t_var;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/24 15:51:01 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 13:53:02 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,58 +134,95 @@ char	gmie(t_var *var, double x, double to_x, double y, double to_y)
 	return (c);
 }
 
-/* char	gmie_save(t_var *var, double x, double to_x, double y, double to_y)
+void	set_delta(t_var *var, double vx, double vy)
 {
-	double	i = 0;
-	double	j = 0;
-	double	dx = (to_x - x) / 1000;
-	double	dy = (to_y - y) / 1000;
+	// var->dda->len_ray = sqrt(vx * vx + vy *vy);
+	var->dda->len_ray = 1; // is better for raycasting
+	if (vx)
+		var->dda->delta_x = var->dda->len_ray / fabs(vx);
+	else
+		var->dda->delta_x = 1e30;
 
-	if (dx >= 0 && dy >= 0)
+	if (vy)
+		var->dda->delta_y = var->dda->len_ray / fabs(vy);
+	else
+		var->dda->delta_y = 1e30;
+}
+
+void	set_pos_x(t_var *var, double pos_x, double pos_y, double vx, double vy)
+{
+	if (vx >= 0)
 	{
-		while (x + i < to_x || y + j < to_y)
-		{
-			if (get_map_index(var, x + i, y + j) == '1')
-				break ;
-			i += dx;
-			j += dy;
-		}
+		var->dda->step_x = 1;
+		var->dda->map_x = (int)pos_x;
+		var->dda->dist_x = (var->dda->map_x + 1 - pos_x) * var->dda->delta_x;
 	}
-	else if (dx <= 0 && dy >= 0)
+	else
 	{
-		while (x + i > to_x || y + j < to_y)
-		{
-			if (get_map_index(var, x + i, y + j) == '1')
-				break ;
-			i += dx;
-			j += dy;
-		}
+		var->dda->step_x = -1;
+		var->dda->map_x = (int)pos_x;
+		var->dda->dist_x = (pos_x - var->dda->map_x) * var->dda->delta_x;
 	}
-	else if (dx >= 0 && dy <= 0)
+}
+
+void	set_pos_y(t_var *var, double pos_x, double pos_y, double vx, double vy)
+{
+	if (vy >= 0)
 	{
-		while (x + i < to_x || y + j > to_y)
-		{
-			if (get_map_index(var, x + i, y + j) == '1')
-				break ;
-			i += dx;
-			j += dy;
-		}
+		var->dda->step_y = 1;
+		var->dda->map_y = (int)pos_y;
+		var->dda->dist_y = (var->dda->map_y + 1 - pos_y) * var->dda->delta_y;
 	}
-	else if (dx <= 0 && dy <= 0)
+	else
 	{
-		while (x + i > to_x || y + j > to_y)
-		{
-			if (get_map_index(var, x + i, y + j) == '1')
-				break ;
-			i += dx;
-			j += dy;
-		}
+		var->dda->step_y = -1;
+		var->dda->map_y = (int)pos_y;
+		var->dda->dist_y = (pos_y - var->dda->map_y) * var->dda->delta_y;
 	}
-	return (get_map_index(var, x + i, y + j));
-} */
+}
+
+void	differential_analyzer(t_var *var)
+{
+	while (1)
+	{
+		if (var->dda->dist_x < var->dda->dist_y){
+			var->dda->dist_x += var->dda->delta_x;
+			var->dda->map_x += var->dda->step_x;
+			var->dda->side = 1;
+		}
+		else{
+			var->dda->dist_y += var->dda->delta_y;
+			var->dda->map_y += var->dda->step_y;
+			var->dda->side = 2;
+		}
+		if (var->pars->map[var->dda->map_y][var->dda->map_x] == '1')
+			break;
+	}
+}
+
+void	get_distance(t_var *var)
+{
+	var->dda->dist = 0;
+	if (var->dda->side == 1){
+		var->dda->dist = (var->dda->dist_x - var->dda->delta_x);
+	}
+	else if (var->dda->side == 2){
+		var->dda->dist = (var->dda->dist_y - var->dda->delta_y);
+	}
+}
 
 /* Digital differential analyzer */
-double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
+void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
+{
+	set_delta(var, vx, vy);
+	set_pos_x(var, pos_x, pos_y, vx, vy);
+	set_pos_y(var, pos_x, pos_y, vx, vy);
+	differential_analyzer(var);
+	get_distance(var);
+}
+
+/* Digital differential analyzer */
+/* double	dda_save(t_var *var, double pos_x, double pos_y, double vx, double vy)
 {
 	double	delta_x;
 	double	delta_y;
@@ -257,45 +294,7 @@ double	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 		dist = (dist_y - delta_y);
 	}
 	return (dist);
-}
-
-/* void	event_old(t_var *var)
-{
-	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
-	{
-		if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
-		{
-			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
-			var->ply->pos_y += var->ply->vx * var->ply->step_x;
-		}
-		else if (get_map_index(var, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y) == '0')
-			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
-		else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
-			var->ply->pos_y += var->ply->vx * var->ply->step_x;
-	}
-	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
-	{
-		if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
-		{
-			var->ply->pos_x += var->ply->vx * var->ply->step_y;
-			var->ply->pos_y += var->ply->vy * var->ply->step_y;
-		}
-		else if (get_map_index(var, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y) == '0')
-			var->ply->pos_x += var->ply->vx * var->ply->step_y;
-		else if (get_map_index(var, var->ply->pos_x, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
-			var->ply->pos_y += var->ply->vy * var->ply->step_y;
-	}
-	if (var->ply->move[2] == KY_LEFT)
-	{
-		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
-		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
-	}
-	else if (var->ply->move[2] == KY_RIGHT)
-	{
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
-	}
-} */
+}*/
 
 void	slip_AD(t_var *var)
 {
@@ -372,44 +371,6 @@ void	event(t_var *var)
 	move_SW(var);
 	rotate_LR(var);
 }
-
-/* void	event_save(t_var *var)
-{
-	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
-	{
-		if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y , var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
-		{
-			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
-			var->ply->pos_y += var->ply->vx * var->ply->step_x;
-		}
-		else if (gmie(var, var->ply->pos_x, var->ply->pos_x - (var->ply->vy * var->ply->step_x), var->ply->pos_y, var->ply->pos_y) == '0')
-			var->ply->pos_x -= var->ply->vy * var->ply->step_x;
-		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vx * var->ply->step_x)) == '0')
-			var->ply->pos_y += var->ply->vx * var->ply->step_x;
-	}
-	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
-	{
-		if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
-		{
-			var->ply->pos_x += var->ply->vx * var->ply->step_y;
-			var->ply->pos_y += var->ply->vy * var->ply->step_y;
-		}
-		else if (gmie(var, var->ply->pos_x, var->ply->pos_x + (var->ply->vx * var->ply->step_y), var->ply->pos_y, var->ply->pos_y) == '0')
-			var->ply->pos_x += var->ply->vx * var->ply->step_y;
-		else if (gmie(var, var->ply->pos_x, var->ply->pos_x, var->ply->pos_y, var->ply->pos_y + (var->ply->vy * var->ply->step_y)) == '0')
-			var->ply->pos_y += var->ply->vy * var->ply->step_y;
-	}
-	if (var->ply->move[2] == KY_LEFT)
-	{
-		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
-		mlp_rotation_matrix(ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
-	}
-	else if (var->ply->move[2] == KY_RIGHT)
-	{
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->vx, &var->ply->vy);
-		mlp_rotation_matrix(-ROTATION_SPEED, &var->ply->plan_x, &var->ply->plan_y);
-	}
-} */
 
 void	execute(int keycode, t_var *var)
 {
@@ -536,7 +497,7 @@ void	draw_line(t_var *var, double x_0, double y_0, double slope, double len)
 	} */
 }
 
-void	raycasting(t_var *var, double dda, int ray)
+void	raycasting(t_var *var, int ray)
 {
 	double	size;
 	int		limit;
@@ -544,7 +505,7 @@ void	raycasting(t_var *var, double dda, int ray)
 	int		b;
 	int		y;
 
-	size =  ((double)RESOLUTION / dda);
+	size =  ((double)RESOLUTION / var->dda->dist);
 	limit = size / 2;
 	a = ((double)RESOLUTION / 2) - limit;
 	b = ((double)RESOLUTION / 2) + limit;
@@ -573,7 +534,6 @@ void	raycasting(t_var *var, double dda, int ray)
 void	projection(t_var *var)
 {
 	double	X;
-	double	dist;
 	size_t	x;
 
  	x = 0;
@@ -582,9 +542,9 @@ void	projection(t_var *var)
 		X = ((2.0 * x) - RESOLUTION) / (double)RESOLUTION;
 		var->ply->ray_dir_x = var->ply->vx + (X * var->ply->plan_x);
 		var->ply->ray_dir_y = var->ply->vy + (X * var->ply->plan_y);
-		dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
-		// draw_line(var, var->ply->pos_x * SCALE, var->ply->pos_y * SCALE, atan2(var->ply->ray_dir_y, var->ply->ray_dir_x), dist * SCALE);
-		raycasting(var, dist, x);
+		dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
+		// draw_line(var, var->ply->pos_x * SCALE, var->ply->pos_y * SCALE, atan2(var->ply->ray_dir_y, var->ply->ray_dir_x), var->dda->dist * SCALE);
+		raycasting(var, x);
 		x++;
 	}
 	/* for (size_t x = 0; x < RESOLUTION; x++)
@@ -619,11 +579,10 @@ void	full_draw_the_map(t_var *var){
 
 void	full_draw_player(t_var *var)
 {
-	double	dist;
 	full_draw_squar(var, (var->ply->pos_x * SCALE) - PLY_SIZE, (var->ply->pos_y * SCALE) - PLY_SIZE, PLY_SIZE*2, PLY_SIZE*2, GREEN);
 	// Digital differential analyzer
-	dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy) * SCALE; 
-	draw_line(var, (var->ply->pos_x) * SCALE, (var->ply->pos_y) * SCALE, atan2(var->ply->vy, var->ply->vx), dist);
+	dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy); 
+	draw_line(var, (var->ply->pos_x) * SCALE, (var->ply->pos_y) * SCALE, atan2(var->ply->vy, var->ply->vx), var->dda->dist * SCALE);
 	// printf("x = %lf,y = %lf\n", var->ply->pos_x, var->ply->pos_y);
 }
 
@@ -686,16 +645,44 @@ void	draw_the_map(t_var *var)
 	// }
 }
 
+void	draw_circle(t_var *var, int x, int y, double r, int color)
+{
+	double	angle;
+	double	x1;
+	double	y1;
+
+	angle = 0;
+	while (angle < 360)
+	{
+		x1 = r * cos(angle * M_PI / 180);
+		y1 = r * sin(angle * M_PI / 180);
+		put_pixel_to_image(var, x + x1, y + y1, color);
+		angle += 0.1;
+	}
+	
+	// for(i = 0; i < 360; i += 0.1)
+	// {
+	// 	angle = i;
+	// 	x1 = r * cos(angle * M_PI / 180);
+	// 	y1 = r * sin(angle * M_PI / 180);
+	// 	my_mlx_pixel_put(data, x + x1, y + y1, color);
+	// }
+}
+
 void	draw_player(t_var *var)
 {
-	double	dist;
+	double	r;
 
-	draw_squar(var, POS_PLY - PLY_SIZE, POS_PLY - PLY_SIZE, PLY_SIZE*2, PLY_SIZE*2, GREEN);
-	dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy) * SCALE;
-	
-	if (dist > 20)
-		dist = 20;
-	draw_line(var, POS_PLY, POS_PLY, atan2(var->ply->vy, var->ply->vx), dist);
+	r = 0;
+	while (r < PLY_SIZE)
+	{
+		draw_circle(var, POS_PLY, POS_PLY, r, GREEN);
+		r += 0.5;
+	}
+	dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy);
+	if ((var->dda->dist * SCALE) > POS_PLY)
+		var->dda->dist = POS_PLY / SCALE;
+	draw_line(var, POS_PLY, POS_PLY, atan2(var->ply->vy, var->ply->vx), var->dda->dist * SCALE);
 }
 
 int	draw(t_var *var)
@@ -740,7 +727,6 @@ void	change_map(t_var *var, int x, int y)
 	int	 i;
 
 	old = ft_strdup(var->pars->map[y]);
-	// free(var->pars->map[y]);
 	new = malloc((ft_strlen(old) + 1) * sizeof(char));
 	i = 0;
 	while (old[i])
@@ -752,8 +738,9 @@ void	change_map(t_var *var, int x, int y)
 		i++;
 	}
 	new[i] = '\0';
+	free(old);
+	free(var->pars->map[y]);
 	var->pars->map[y] = new;
-	printf("%s", var->pars->map[y]);
 }
 
 void	player_set(t_var *var)
@@ -764,7 +751,6 @@ void	player_set(t_var *var)
 	y = 0;
 	while (var->pars->map[y])
 	{
-		printf("%s\n", var->pars->map[y]);
 		x = 0;
 		while (var->pars->map[y][x])
 		{
@@ -777,7 +763,6 @@ void	player_set(t_var *var)
 				var->ply->pos_x = x + 0.5;
 				directions_player(var, var->pars->map[y][x]);
 				change_map(var, x, y);
-				// var->pars->map[y][x] = '0';
 				return ;
 			}
 			x++;
@@ -799,29 +784,36 @@ void	player_set(t_var *var)
 
 void	init(t_var *var)
 {
+	int fd = open("maps/map_old.cub", 0666);
+	char *line = get_next_line(fd);
+	int i = 0;
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+		i++;
+	}
+	var->pars->map = malloc(sizeof(char *) * (i + 1));
+	var->pars->map[i] = NULL;
+	close(fd);
+	fd = open("maps/map_old.cub", 0666);
+	line = get_next_line(fd);
+	for (size_t j = 0; line; j++)
+	{
+		var->pars->map[j] = line;
+		line = get_next_line(fd);
+	}
+	close(fd);
+	player_set(var);
 	var->ply->step_x = SPEED;
 	var->ply->step_y = SPEED;
-	// var->ply->pos_x = 0;
-	// var->ply->pos_y = 0;
-	// var->ply->vx = 1;
-	// var->ply->vy = 0;
-	// var->ply->plan_x = 0;
-	// var->ply->plan_y = 0.5;
 	var->ply->move[0] = -1;
 	var->ply->move[1] = -1;
 	var->ply->move[2] = -1;
 }
 
-int	main(int ac, char **av)
+void	cub3d(t_var *var)
 {
-	t_var	*var;
-
-	var = malloc(sizeof(t_var));
-	var->lx = malloc(sizeof(t_mlx));
-	var->ply = malloc(sizeof(t_player));
-	parsing(var, ac, av);
-
-	init(var);
 	var->lx->mlx = mlx_init();
 	var->lx->win = mlx_new_window(var->lx->mlx, RESOLUTION, RESOLUTION, "CUB3D");
 	var->lx->img = mlx_new_image(var->lx->mlx, RESOLUTION, RESOLUTION);
@@ -831,9 +823,25 @@ int	main(int ac, char **av)
 	mlx_hook(var->lx->win, ON_KEYUP, 0, upbind, var);
 	mlx_hook(var->lx->win, ON_DESTROY, 0, xite, var);
 	mlx_hook(var->lx->win, ON_MOUSEMOVE, 0, mouse_position, var);
-	show_control();
-	player_set(var);
 	mlx_loop_hook(var->lx->mlx, draw, var);
 	mlx_loop(var->lx->mlx);
+}
+
+int	main(int ac, char **av)
+{
+	t_var	*var;
+
+	var = malloc(sizeof(t_var));
+	var->lx = malloc(sizeof(t_mlx));
+	var->ply = malloc(sizeof(t_player));
+	var->dda = malloc(sizeof(t_dda));
+
+	var->pars = malloc(sizeof(t_pars));
+	// parsing(var, ac, av);
+
+	show_help();
+	show_control();
+	init(var);
+	cub3d(var);
 	return (0);
 }

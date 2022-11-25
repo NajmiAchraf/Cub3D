@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+         #
+#    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/24 15:48:55 by sriyani          ###   ########.fr        #
+#    Updated: 2022/11/24 20:52:54 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-CFLAGS = -fsanitize=address # -Wall -Werror -Wextra
+CFLAGS = # -fsanitize=address # -Wall -Werror -Wextra
 
 CC = cc 
 
