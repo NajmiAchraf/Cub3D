@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 14:41:43 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/25 15:30:32 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@ keyboard binds
 
 # define KY_ESC 53
 
-# define CK_LEFT 1
-# define CK_UP 4
-# define CK_DOWN 5
-
 # define ROTATION_SPEED 0.02
 # define MOUSE_ROT_SPEED 0.0075
 # define SPEED 0.05
@@ -40,22 +36,18 @@ keyboard binds
 # ifdef __linux__
 #  define KY_LEFT 65361
 #  define KY_RIGHT 65363
-#  define KY_DOWN 65364
-#  define KY_UP 65362
-#  define CK_RIGHT 3
-#  define CK_MIDDLE 2
-
-# elif __APPLE__
-#  define KY_LEFT 123
-#  define KY_RIGHT 124
-#  define KY_DOWN 125
-#  define KY_UP 126
 #  define KY_A 0
 #  define KY_D 2
 #  define KY_S 1
 #  define KY_W 13
-#  define CK_RIGHT 2
-#  define CK_MIDDLE 3
+
+# elif __APPLE__
+#  define KY_LEFT 123
+#  define KY_RIGHT 124
+#  define KY_A 0
+#  define KY_D 2
+#  define KY_S 1
+#  define KY_W 13
 # endif
 
 enum {

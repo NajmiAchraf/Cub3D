@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 14:40:02 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/25 15:36:36 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ char	gmie(t_var *var, double x, double to_x, double y, double to_y)
 void	set_delta(t_var *var, double vx, double vy)
 {
 	// var->dda->len_ray = sqrt(vx * vx + vy *vy);
-	var->dda->len_ray = 1; // is better for raycasting
+	var->dda->len_ray = 1;
 	if (vx)
 		var->dda->delta_x = var->dda->len_ray / fabs(vx);
 	else
@@ -221,82 +221,7 @@ void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	get_distance(var);
 }
 
-/* Digital differential analyzer */
-/* double	dda_save(t_var *var, double pos_x, double pos_y, double vx, double vy)
-{
-	double	delta_x;
-	double	delta_y;
-	// double len_ray = sqrt(vx * vx + vy *vy);
-	double len_ray = 1; // is better for raycasting
-	if (vx)
-		delta_x = len_ray / fabs(vx);
-	else
-		delta_x = 1e30;
-
-	if (vy)
-		delta_y = len_ray / fabs(vy);
-	else
-		delta_y = 1e30;
-
-	int step_x;
-	int	step_y;
-	int	map_x;
-	int	map_y;
-	double	dist_x;
-	double	dist_y;
-
-	if (vx >= 0)
-	{
-		step_x = 1;
-		map_x = (int)pos_x;
-		dist_x = (map_x + 1 - pos_x) * delta_x;
-	}
-	else
-	{
-		step_x = -1;
-		map_x = (int)pos_x;
-		dist_x = (pos_x - map_x) * delta_x;
-	}
-
-	if (vy >= 0)
-	{
-		step_y = 1;
-		map_y = (int)pos_y;
-		dist_y = (map_y + 1 - pos_y) * delta_y;
-	}
-	else{
-		step_y = -1;
-		map_y = (int)pos_y;
-		dist_y = (pos_y - map_y) * delta_y;
-	}
-
-	int side;
-	while (1)
-	{
-		if (dist_x < dist_y){
-			dist_x += delta_x;
-			map_x += step_x;
-			side = 1;
-		}
-		else{
-			dist_y += delta_y;
-			map_y += step_y;
-			side = 2;
-		}
-		if (var->pars->map[map_y][map_x] == '1')
-			break;
-	}
-	double dist = 0;
-	if (side == 1){
-		dist = (dist_x - delta_x);
-	}
-	else{
-		dist = (dist_y - delta_y);
-	}
-	return (dist);
-}*/
-
-void	slip_ad(t_var *var)
+void	slide_ad(t_var *var)
 {
 	if (gmie(var, var->ply->pos_x, \
 		var->ply->pos_x - (var->ply->vy * var->ply->step_x), \
@@ -320,11 +245,11 @@ void	move_ad(t_var *var)
 			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 		}
 		else
-			slip_ad(var);
+			slide_ad(var);
 	}
 }
 
-void	slip_sw(t_var *var)
+void	slide_sw(t_var *var)
 {
 	if (gmie(var, var->ply->pos_x, \
 		var->ply->pos_x + (var->ply->vx * var->ply->step_y), \
@@ -347,7 +272,7 @@ void	move_sw(t_var *var)
 			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 		}
 		else
-			slip_sw(var);
+			slide_sw(var);
 	}
 }
 
@@ -395,20 +320,15 @@ void	execute(int keycode, t_var *var)
 		var->ply->step_y = SPEED;
 	}
 	else if (keycode == KY_LEFT)
-	{
 		var->ply->move[2] = KY_LEFT;
-	}
 	else if (keycode == KY_RIGHT)
-	{
 		var->ply->move[2] = KY_RIGHT;
-	}
 }
 
 int	downbind(int keycode, t_var *var)
 {
-	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_DOWN
-		|| keycode == KY_UP|| keycode == KY_A || keycode == KY_S || keycode == KY_D
-		|| keycode == KY_W)
+	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_A 
+		|| keycode == KY_S || keycode == KY_D || keycode == KY_W)
 		execute(keycode, var);
 	// printf("%d\n", keycode);
 	return (0);
@@ -490,11 +410,6 @@ void	draw_line(t_var *var, double x_0, double y_0, double slope, double len)
 		put_pixel_to_image(var, x_0 + x, y_0 + y, GREEN);
 		r += 0.1;
 	}
-	/* for (double r = 0; r < len; r += 0.1){
-		x = cos(slope) * r;
-		y = sin(slope) * r;
-		put_pixel_to_image(var, x_0 + x, y_0 + y, GREEN);
-	} */
 }
 
 void	raycasting(t_var *var, int ray)
@@ -520,15 +435,6 @@ void	raycasting(t_var *var, int ray)
 			put_pixel_to_image(var, ray, y, PISTASH);
 		y++;
 	}
-	/* for (int y = 0; y < RESOLUTION; y++)
-	{
-		if (a <= y && y <= b)
-			put_pixel_to_image(var, ray, y, CREAMY);
-		else if (y < a)
-			put_pixel_to_image(var, ray, y, CYAN);
-		if (y > b)
-			put_pixel_to_image(var, ray, y, PISTASH);
-	} */
 }
 
 void	projection(t_var *var)
@@ -547,15 +453,6 @@ void	projection(t_var *var)
 		raycasting(var, x);
 		x++;
 	}
-	/* for (size_t x = 0; x < RESOLUTION; x++)
-	{
-		X = ((2.0 * x) - RESOLUTION) / (double)RESOLUTION;
-		var->ply->ray_dir_x = var->ply->vx + (X * var->ply->plan_x);
-		var->ply->ray_dir_y = var->ply->vy + (X * var->ply->plan_y);
-		dist = dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
-		// draw_line(var, var->ply->pos_x * SCALE, var->ply->pos_y * SCALE, atan2(var->ply->ray_dir_y, var->ply->ray_dir_x), dist * SCALE);
-		raycasting(var, dist, x);
-	} */
 }
 
 void	full_draw_squar(t_var *var, double x, double y, double size_x, double size_y, int color){
@@ -602,11 +499,6 @@ void	draw_squar(t_var *var, double x, double y, double size_x, double size_y, in
 		}
 		j++;
 	}
-	// for (int j = y; j < y + size_y - 1; j++){
-	// 	for (int i = x; i < x + size_x - 1; i++){
-	// 		put_pixel_to_image(var, i,j, color);
-	// 	}
-	// }
 }
 
 void	draw_the_map(t_var *var)
@@ -634,15 +526,6 @@ void	draw_the_map(t_var *var)
 		}
 		y++;
 	}
-
-	// for (int y = 0; var->pars->map[y]; y++){
-	// 	for (int x = 0; var->pars->map[y][x]; x++){
-	// 		if (var->pars->map[y][x] == '1' && ((fabs(var->ply->pos_x - x)) * SCALE) < POS_PLY && ((fabs(var->ply->pos_y - y)) * SCALE) < POS_PLY)
-	// 			draw_squar(var, (x - var->ply->pos_x) * SCALE + POS_PLY, (y - var->ply->pos_y) * SCALE + POS_PLY, SCALE, SCALE, WHITE);
-	// 		else if (var->pars->map[y][x] == '0' && ((fabs(var->ply->pos_x - x)) * SCALE) < POS_PLY && ((fabs(var->ply->pos_y - y)) * SCALE) < POS_PLY)
-	// 			draw_squar(var, (x - var->ply->pos_x) * SCALE + POS_PLY, (y - var->ply->pos_y) * SCALE + POS_PLY, SCALE, SCALE, BLUE);
-	// 	}
-	// }
 }
 
 void	draw_circle(t_var *var, int x, int y, double r, int color)
@@ -659,14 +542,6 @@ void	draw_circle(t_var *var, int x, int y, double r, int color)
 		put_pixel_to_image(var, x + x1, y + y1, color);
 		angle += 0.1;
 	}
-	
-	// for(i = 0; i < 360; i += 0.1)
-	// {
-	// 	angle = i;
-	// 	x1 = r * cos(angle * M_PI / 180);
-	// 	y1 = r * sin(angle * M_PI / 180);
-	// 	my_mlx_pixel_put(data, x + x1, y + y1, color);
-	// }
 }
 
 void	draw_player(t_var *var)
@@ -769,41 +644,10 @@ void	player_set(t_var *var)
 		}
 		y++;
 	}
-	/* for (y=0; var->pars->map[y]; y++) {
-		for (x=0; var->pars->map[y][x]; x++) {
-			if (var->pars->map[y][x] == 'N') // NSEW
-			{
-				var->ply->pos_y = y + 0.5;
-				var->ply->pos_x = x + 0.5;
-				var->pars->map[y][x] = '0';
-				return 0;
-			}
-		}
-	} */
 }
 
 void	init(t_var *var)
 {
-	// int fd = open("maps/map_old.cub", 0666);
-	// char *line = get_next_line(fd);
-	// int i = 0;
-	// while (line)
-	// {
-	// 	free(line);
-	// 	line = get_next_line(fd);
-	// 	i++;
-	// }
-	// var->pars->map = malloc(sizeof(char *) * (i + 1));
-	// var->pars->map[i] = NULL;
-	// close(fd);
-	// fd = open("maps/map_old.cub", 0666);
-	// line = get_next_line(fd);
-	// for (size_t j = 0; line; j++)
-	// {
-	// 	var->pars->map[j] = line;
-	// 	line = get_next_line(fd);
-	// }
-	// close(fd);
 	player_set(var);
 	var->ply->step_x = SPEED;
 	var->ply->step_y = SPEED;
@@ -836,7 +680,6 @@ int	main(int ac, char **av)
 	var->ply = malloc(sizeof(t_player));
 	var->dda = malloc(sizeof(t_dda));
 
-	var->pars = malloc(sizeof(t_pars));
 	parsing(var, ac, av);
 
 	show_help();
