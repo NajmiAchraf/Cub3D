@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 13:11:10 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/25 14:41:43 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ typedef struct s_var
 }				t_var;
 
 
-
 int		ft_atoi_plus(char *str);
 char	*ft_join(char *s1);
 void	ft_error_fd(int fd);
@@ -185,7 +184,7 @@ int		lent_map(char *str);
 void	check_f_range(t_var *var, char *str);
 void	check_c_range(t_var *var, char *str);
 void	check_map2(t_var *var, int i, int j);
-void	fill_map(t_var *var, int i, int len);
+int		fill_map(t_var *var, int i, int len);
 int		check_file2(t_var *var, int i, int j, int fd);
 int		check_file3(t_var *var, int i, int j, int len);
 int		check_file_no(t_var *var, int i, int j, int fd);

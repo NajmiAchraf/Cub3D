@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 15:00:07 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/23 15:21:09 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 10:54:50 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (str1[i] - str2[i]);
 }
 
-int	ft_strch(char c, char const *src)
+int	ft_strch(char  *src, char c)
 {
 	int	i;
 

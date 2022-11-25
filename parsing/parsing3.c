@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:30:29 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:03:40 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/24 18:25:58 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ void	valid_map_line1(t_var *var, int i)
 	while (var->pars->map[i -1][j])
 	{
 		if (var->pars->map[i -1][j] != '1' && var->pars->map[i -1][j] != ' ')
-			ft_error("Error from valid");
+			ft_error("Error from valid 3");
 		j++;
 	}
 	if (!ft_strchr(var->pars->map[i -1], '1') && var->pars->map[i] == NULL)
-		ft_error("Error from valid");
+		ft_error("Error from valid 4");
 }
 
 void	valid_map_line(t_var *var)
@@ -59,14 +59,15 @@ void	valid_map_line(t_var *var)
 	while (var->pars->map[i])
 	{
 		if (var->pars->map[i][0] == '\0')
-			ft_error("Error from valid");
+			ft_error("Error from valid 1");
 		i++;
 	}
 	j = 0;
 	while (var->pars->map[0][j])
 	{
+		
 		if (var->pars->map[0][j] != '1' && var->pars->map[0][j] != ' ')
-			ft_error("Error from valid");
+			ft_error("Error from valid 2");
 		j++;
 	}
 	valid_map_line1(var, i);

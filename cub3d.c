@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 13:53:02 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/25 14:40:02 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	get_map_index(t_var *var, double x, double y)
 	return (c);
 }
 
-char	gmie_NE(t_var *var, double x, double to_x, double y, double to_y)
+char	gmie_ne(t_var *var, double x, double to_x, double y, double to_y)
 {
 	double	i;
 	double	j;
@@ -52,7 +52,7 @@ char	gmie_NE(t_var *var, double x, double to_x, double y, double to_y)
 	return (get_map_index(var, x + i, y + j));
 }
 
-char	gmie_ES(t_var *var, double x, double to_x, double y, double to_y)
+char	gmie_es(t_var *var, double x, double to_x, double y, double to_y)
 {
 	double	i;
 	double	j;
@@ -73,7 +73,7 @@ char	gmie_ES(t_var *var, double x, double to_x, double y, double to_y)
 	return (get_map_index(var, x + i, y + j));
 }
 
-char	gmie_SW(t_var *var, double x, double to_x, double y, double to_y)
+char	gmie_sw(t_var *var, double x, double to_x, double y, double to_y)
 {
 	double	i;
 	double	j;
@@ -94,7 +94,7 @@ char	gmie_SW(t_var *var, double x, double to_x, double y, double to_y)
 	return (get_map_index(var, x + i, y + j));
 }
 
-char	gmie_WN(t_var *var, double x, double to_x, double y, double to_y)
+char	gmie_wn(t_var *var, double x, double to_x, double y, double to_y)
 {
 	double	i;
 	double	j;
@@ -124,13 +124,13 @@ char	gmie(t_var *var, double x, double to_x, double y, double to_y)
 	dx = (to_x - x) / 1000;
 	dy = (to_y - y) / 1000;
 	if (dx >= 0 && dy <= 0)
-		c = gmie_NE(var, x, to_x, y, to_y);
+		c = gmie_ne(var, x, to_x, y, to_y);
 	else if (dx >= 0 && dy >= 0)
-		c = gmie_ES(var, x, to_x, y, to_y);
+		c = gmie_es(var, x, to_x, y, to_y);
 	else if (dx <= 0 && dy >= 0)
-		c = gmie_SW(var, x, to_x, y, to_y);
+		c = gmie_sw(var, x, to_x, y, to_y);
 	else if (dx <= 0 && dy <= 0)
-		c = gmie_WN(var, x, to_x, y, to_y);
+		c = gmie_wn(var, x, to_x, y, to_y);
 	return (c);
 }
 
@@ -296,7 +296,7 @@ void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 	return (dist);
 }*/
 
-void	slip_AD(t_var *var)
+void	slip_ad(t_var *var)
 {
 	if (gmie(var, var->ply->pos_x, \
 		var->ply->pos_x - (var->ply->vy * var->ply->step_x), \
@@ -308,7 +308,7 @@ void	slip_AD(t_var *var)
 		var->ply->pos_y += var->ply->vx * var->ply->step_x;
 }
 
-void	move_AD(t_var *var)
+void	move_ad(t_var *var)
 {
 	if (var->ply->move[0] == KY_A || var->ply->move[0] == KY_D)
 	{
@@ -320,11 +320,11 @@ void	move_AD(t_var *var)
 			var->ply->pos_y += var->ply->vx * var->ply->step_x;
 		}
 		else
-			slip_AD(var);
+			slip_ad(var);
 	}
 }
 
-void	slip_SW(t_var *var)
+void	slip_sw(t_var *var)
 {
 	if (gmie(var, var->ply->pos_x, \
 		var->ply->pos_x + (var->ply->vx * var->ply->step_y), \
@@ -335,7 +335,7 @@ void	slip_SW(t_var *var)
 		var->ply->pos_y += var->ply->vy * var->ply->step_y;
 }
 
-void	move_SW(t_var *var)
+void	move_sw(t_var *var)
 {
 	if (var->ply->move[1] == KY_S || var->ply->move[1] == KY_W)
 	{
@@ -347,11 +347,11 @@ void	move_SW(t_var *var)
 			var->ply->pos_y += var->ply->vy * var->ply->step_y;
 		}
 		else
-			slip_SW(var);
+			slip_sw(var);
 	}
 }
 
-void	rotate_LR(t_var *var)
+void	rotate_lr(t_var *var)
 {
 	if (var->ply->move[2] == KY_LEFT)
 	{
@@ -367,9 +367,9 @@ void	rotate_LR(t_var *var)
 
 void	event(t_var *var)
 {
-	move_AD(var);
-	move_SW(var);
-	rotate_LR(var);
+	move_ad(var);
+	move_sw(var);
+	rotate_lr(var);
 }
 
 void	execute(int keycode, t_var *var)
@@ -784,26 +784,26 @@ void	player_set(t_var *var)
 
 void	init(t_var *var)
 {
-	int fd = open("maps/map_old.cub", 0666);
-	char *line = get_next_line(fd);
-	int i = 0;
-	while (line)
-	{
-		free(line);
-		line = get_next_line(fd);
-		i++;
-	}
-	var->pars->map = malloc(sizeof(char *) * (i + 1));
-	var->pars->map[i] = NULL;
-	close(fd);
-	fd = open("maps/map_old.cub", 0666);
-	line = get_next_line(fd);
-	for (size_t j = 0; line; j++)
-	{
-		var->pars->map[j] = line;
-		line = get_next_line(fd);
-	}
-	close(fd);
+	// int fd = open("maps/map_old.cub", 0666);
+	// char *line = get_next_line(fd);
+	// int i = 0;
+	// while (line)
+	// {
+	// 	free(line);
+	// 	line = get_next_line(fd);
+	// 	i++;
+	// }
+	// var->pars->map = malloc(sizeof(char *) * (i + 1));
+	// var->pars->map[i] = NULL;
+	// close(fd);
+	// fd = open("maps/map_old.cub", 0666);
+	// line = get_next_line(fd);
+	// for (size_t j = 0; line; j++)
+	// {
+	// 	var->pars->map[j] = line;
+	// 	line = get_next_line(fd);
+	// }
+	// close(fd);
 	player_set(var);
 	var->ply->step_x = SPEED;
 	var->ply->step_y = SPEED;
@@ -837,7 +837,7 @@ int	main(int ac, char **av)
 	var->dda = malloc(sizeof(t_dda));
 
 	var->pars = malloc(sizeof(t_pars));
-	// parsing(var, ac, av);
+	parsing(var, ac, av);
 
 	show_help();
 	show_control();

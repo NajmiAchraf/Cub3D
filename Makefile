@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/24 20:52:54 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/25 14:42:51 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -128,4 +128,4 @@ bonus :
 
 run :
 	@echo "$(C_L_BLUE)[RUN CUB3D!]$(C_RES)"
-	@./cub3D map.cub
+	@./cub3D maps/map.cub

@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 11:41:54 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:09:19 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 10:32:51 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	check_file(t_var *var, int len)
 		}
 		i++;
 	}
+	printf("var->pars->map1 = |%d| \n", var->pars->map1);
 	if (!var->pars->nn || !var->pars->ss || !var->pars->ww
 		|| !var->pars->ee || !var->pars->ff
 		|| !var->pars->cc || !var->pars->map1)
@@ -74,6 +75,7 @@ void	parsing_init(t_var *var)
 // 	var->text->img[3] = fill_texture1(var, var->pars->ea[1]);
 // }
 
+
 void	parsing(t_var *var, int ac, char **av)
 {
 	int		fd;
@@ -87,6 +89,8 @@ void	parsing(t_var *var, int ac, char **av)
 	check_extension(ac, av);
 	len = lent_map(av[1]);
 	var->pars->hold = malloc(sizeof(char *) * (len + 1));
+	var->pars->map = NULL;
+	parsing_init(var);
 	while (i < len)
 	{
 		var->pars->hold[i] = ft_join(get_next_line(fd));

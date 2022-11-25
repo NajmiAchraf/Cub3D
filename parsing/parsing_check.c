@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:11:41 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:03:40 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 10:04:27 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,10 @@ int	check_file3(t_var *var, int i, int j, int len)
 		if (!check_file_c(var, i, j))
 			return (0);
 	}
-	if (!var->pars->map1 && (var->pars->hold[i][j] == '1'
-		|| var->pars->hold[i][j] == ' '))
+	if (!var->pars->map1 && (var->pars->hold[i][j] == '1' || var->pars->hold[i][j] == ' '))
 	{
-		fill_map(var, i, len);
-		var->pars->map1 = 1;
+		if (!fill_map(var, i, len))
+			return (0);
 	}
 	if (!var->pars->nn || !var->pars->ss || !var->pars->ww
 		|| !var->pars->ee || !var->pars->ff || !var->pars->cc
