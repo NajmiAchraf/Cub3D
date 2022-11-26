@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/26 19:51:23 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/26 20:20:18 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,6 +382,16 @@ int	xite(void)
 	return (0);
 }
 
+int    get_texture_color(t_tex *tex, int x, int y)
+{
+	int *dist;
+
+	x = x % 64;
+	dist = (int *)(tex->ptr + (y * tex->line_lenght + \
+			x * (tex->bpp / 8)));
+	return (*(dist));
+}
+
 void	put_pixel_to_image(t_var *var, int x, int y, int color)
 {
 	if (x < 0 || x >= RESOLUTION || y < 0 || y >= RESOLUTION)
@@ -415,33 +425,15 @@ void	draw_line(t_var *var, double x_0, double y_0, double slope, double len)
 	{
 		x = cos(slope) * r;
 		y = sin(slope) * r;
-		put_pixel_to_image(var, x_0 + x, y_0 + y, GREEN);
+		put_pixel_to_image(var, x_0 + x, y_0 + y, CREAMY);
 		r += 0.1;
 	}
 }
 
-unsigned long create_rgb(int r, int g, int b)
-{
-	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
-}
-
-void	colors(t_var *var)
-{
-	char **ptr;
-
-	ptr = ft_split(var->pars->c[0], ' ');
-	var->lx->ceiling = create_rgb(ft_atoi(ptr[1]), ft_atoi(var->pars->c[1]), ft_atoi(var->pars->c[2]));
-	ft_free(ptr);
-	free(ptr);
-	ptr = ft_split(var->pars->f[0], ' ');
-	var->lx->floor = create_rgb(ft_atoi(ptr[1]), ft_atoi(var->pars->f[1]), ft_atoi(var->pars->f[2]));
-	ft_free(ptr);
-	free(ptr);
-}
-
 void	put_texture_to_image(t_var *var, int x, int y, double wall_y, int n)
 {
-	put_pixel_to_image(var, x ,y, get_texture_color(var->tex[0], var->dda->wall_x * var->tex[0]->width, var->tex[0]->height * wall_y));
+	put_pixel_to_image(var, x ,y, get_texture_color(var->tex[n], \
+		var->dda->wall_x * var->tex[n]->width, var->tex[n]->height * wall_y));
 }
 
 void	raycaste_images(t_var *var, int x, int y, double wall_y)
@@ -632,7 +624,7 @@ void	draw_player(t_var *var)
 	r = 0;
 	while (r < PLY_SIZE)
 	{
-		draw_circle(var, POS_PLY, POS_PLY, r, GREEN);
+		draw_circle(var, POS_PLY, POS_PLY, r, CREAMY);
 		r += 0.5;
 	}
 	dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy);
@@ -654,6 +646,72 @@ int	draw(t_var *var)
 	show_image(var);
 	event(var);
 	return (0);
+}
+
+t_tex	*fill_texture1(t_var *var, char *path)
+{
+	t_tex	*tex;
+
+	char *extention = ft_strrchr(path, '.');
+	if (extention && ft_strncmp(extention, ".xpm", 4) == 0)
+	{
+		tex = malloc(sizeof(t_tex));
+		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, &tex->width, &tex->height);
+		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, &tex->bpp, &tex->line_lenght, &tex->endian));
+		if (!tex->tex || !tex->ptr)
+		{
+			tex->tex && (mlx_destroy_image(var->lx->mlx, tex->tex));
+			free(tex);
+			return (NULL);
+		}
+		return (tex);
+	}
+	return (NULL);
+}
+
+void	fill_texture(t_var	*var)
+{
+	var->tex[0] = fill_texture1(var, var->pars->no[1]);
+	var->tex[1] = fill_texture1(var, var->pars->so[1]);
+	var->tex[2] = fill_texture1(var, var->pars->we[1]);
+	var->tex[3] = fill_texture1(var, var->pars->ea[1]);
+}
+
+void	cub3d(t_var *var)
+{
+	var->lx->mlx = mlx_init();
+	var->lx->win = mlx_new_window(var->lx->mlx, RESOLUTION, RESOLUTION, "CUB3D");
+	var->lx->img = mlx_new_image(var->lx->mlx, RESOLUTION, RESOLUTION);
+	var->lx->addr = mlx_get_data_addr(var->lx->img, &var->lx->bits_per_pixel,
+			&var->lx->line_length, &var->lx->endian);
+	fill_texture(var);
+	mlx_hook(var->lx->win, ON_KEYDOWN, 0, downbind, var);
+	mlx_hook(var->lx->win, ON_KEYUP, 0, upbind, var);
+	mlx_hook(var->lx->win, ON_DESTROY, 0, xite, var);
+	mlx_hook(var->lx->win, ON_MOUSEMOVE, 0, mouse_position, var);
+	mlx_loop_hook(var->lx->mlx, draw, var);
+	mlx_loop(var->lx->mlx);
+}
+
+unsigned long create_rgb(int r, int g, int b)
+{
+	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+}
+
+void	colors(t_var *var)
+{
+	char **ptr;
+
+	ptr = ft_split(var->pars->c[0], ' ');
+	var->lx->ceiling = create_rgb(ft_atoi(ptr[1]), \
+		ft_atoi(var->pars->c[1]), ft_atoi(var->pars->c[2]));
+	ft_free(ptr);
+	free(ptr);
+	ptr = ft_split(var->pars->f[0], ' ');
+	var->lx->floor = create_rgb(ft_atoi(ptr[1]), \
+		ft_atoi(var->pars->f[1]), ft_atoi(var->pars->f[2]));
+	ft_free(ptr);
+	free(ptr);
 }
 
 void	set_directions(t_var *var, double vx, double vy, double plan_x, double plan_y)
@@ -736,66 +794,6 @@ void	init(t_var *var)
 	var->ply->move[1] = -1;
 	var->ply->move[2] = -1;
 }
-
-void	cub3d(t_var *var)
-{
-	var->lx->mlx = mlx_init();
-	var->lx->win = mlx_new_window(var->lx->mlx, RESOLUTION, RESOLUTION, "CUB3D");
-	var->lx->img = mlx_new_image(var->lx->mlx, RESOLUTION, RESOLUTION);
-	var->lx->addr = mlx_get_data_addr(var->lx->img, &var->lx->bits_per_pixel,
-			&var->lx->line_length, &var->lx->endian);
-	fill_texture(var);
-	mlx_hook(var->lx->win, ON_KEYDOWN, 0, downbind, var);
-	mlx_hook(var->lx->win, ON_KEYUP, 0, upbind, var);
-	mlx_hook(var->lx->win, ON_DESTROY, 0, xite, var);
-	mlx_hook(var->lx->win, ON_MOUSEMOVE, 0, mouse_position, var);
-	mlx_loop_hook(var->lx->mlx, draw, var);
-	mlx_loop(var->lx->mlx);
-}
-
-
-t_tex	*fill_texture1(t_var *var, char *path)
-{
-	t_tex	*tex;
-
-	char *extention = ft_strrchr(path, '.');
-	if (extention && ft_strncmp(extention, ".xpm", 4) == 0)
-	{
-		tex = malloc(sizeof(t_tex));
-		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, &tex->width, &tex->height);
-		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, &tex->bpp, &tex->line_lenght, &tex->endian));
-		if (!tex->tex || !tex->ptr)
-		{
-			tex->tex && (mlx_destroy_image(var->lx->mlx, tex->tex));
-			free(tex);
-			return (NULL);
-		}
-		return (tex);
-	}
-	return (NULL);
-}
-
-
-void	fill_texture(t_var	*var)
-{
-	var->tex[0] = fill_texture1(var, var->pars->no[1]);
-	var->tex[1] = fill_texture1(var, var->pars->so[1]);
-	var->tex[2] = fill_texture1(var, var->pars->we[1]);
-	var->tex[3] = fill_texture1(var, var->pars->ea[1]);
-}
-
-int    get_texture_color(t_tex *tex, int x, int y)
-{
-	int *dist;
-
-	// if (x < 0 || x >= 64 || y < 0 || y >= 64)
-	// 	return (0);
-	x = x % 64;
-	dist = (int *)(tex->ptr + (y * tex->line_lenght + \
-			x * (tex->bpp / 8)));
-	return (*(dist));
-}
-
 
 int	main(int ac, char **av)
 {
