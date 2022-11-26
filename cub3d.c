@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 16:44:59 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/26 19:51:23 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,25 +200,33 @@ void	differential_analyzer(t_var *var)
 	}
 }
 
-void	get_distance(t_var *var)
+void	get_distance(t_var *var, double pos_x, double pos_y, double vx, double vy)
 {
 	var->dda->dist = 0;
-	if (var->dda->side == 1){
+	var->dda->wall_x = 0;
+	if (var->dda->side == 1)
+	{
 		var->dda->dist = (var->dda->dist_x - var->dda->delta_x);
+		var->dda->wall_x = pos_y + var->dda->dist * vy;
 	}
-	else if (var->dda->side == 2){
+	else if (var->dda->side == 2)
+	{
 		var->dda->dist = (var->dda->dist_y - var->dda->delta_y);
+		var->dda->wall_x = pos_x + var->dda->dist * vx;
 	}
+	var->dda->wall_x = var->dda->wall_x - (int) var->dda->wall_x;
 }
 
 /* Digital differential analyzer */
 void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
 {
+	var->dda->vx = vx;
+	var->dda->vy = vy;
 	set_delta(var, vx, vy);
 	set_pos_x(var, pos_x, pos_y, vx, vy);
 	set_pos_y(var, pos_x, pos_y, vx, vy);
 	differential_analyzer(var);
-	get_distance(var);
+	get_distance(var, pos_x, pos_y, vx, vy);
 }
 
 void	slide_ad(t_var *var)
@@ -412,35 +420,107 @@ void	draw_line(t_var *var, double x_0, double y_0, double slope, double len)
 	}
 }
 
-void	raycasting(t_var *var, int ray)
+unsigned long create_rgb(int r, int g, int b)
 {
-	double	size;
-	int		limit;
-	int		a;
-	int		b;
-	int		y;
+	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+}
 
-	size =  ((double)RESOLUTION / var->dda->dist);
-	limit = size / 2;
-	a = ((double)RESOLUTION / 2) - limit;
-	b = ((double)RESOLUTION / 2) + limit;
+void	colors(t_var *var)
+{
+	char **ptr;
+
+	ptr = ft_split(var->pars->c[0], ' ');
+	var->lx->ceiling = create_rgb(ft_atoi(ptr[1]), ft_atoi(var->pars->c[1]), ft_atoi(var->pars->c[2]));
+	ft_free(ptr);
+	free(ptr);
+	ptr = ft_split(var->pars->f[0], ' ');
+	var->lx->floor = create_rgb(ft_atoi(ptr[1]), ft_atoi(var->pars->f[1]), ft_atoi(var->pars->f[2]));
+	ft_free(ptr);
+	free(ptr);
+}
+
+void	put_texture_to_image(t_var *var, int x, int y, double wall_y, int n)
+{
+	put_pixel_to_image(var, x ,y, get_texture_color(var->tex[0], var->dda->wall_x * var->tex[0]->width, var->tex[0]->height * wall_y));
+}
+
+void	raycaste_images(t_var *var, int x, int y, double wall_y)
+{
+	if (var->dda->side == 2 && var->dda->vy <= 0)
+		put_texture_to_image(var, x, y, wall_y, 0);
+	else if (var->dda->side == 2)
+		put_texture_to_image(var, x, y, wall_y, 1);
+	if (var->dda->side == 1 && var->dda->vx <= 0)
+		put_texture_to_image(var, x, y, wall_y, 2);
+	else if (var->dda->side == 1)
+		put_texture_to_image(var, x, y, wall_y, 3);
+}
+
+void	projection(t_var *var, int x)
+{
+	int height_line;
+	int y;
+	int start;
+	int end;
+	double wall_y;
+
+	height_line = RESOLUTION/ var->dda->dist;
+	start  = (RESOLUTION - height_line)/2;
+	end  = (RESOLUTION + height_line)/2;
 	y = 0;
 	while (y < RESOLUTION)
 	{
-		if (a <= y && y <= b)
-			put_pixel_to_image(var, ray, y, CREAMY);
-		else if (y < a)
-			put_pixel_to_image(var, ray, y, CYAN);
-		if (y > b)
-			put_pixel_to_image(var, ray, y, PISTASH);
+		if (start < y && y < end)
+		{
+			wall_y = (double)(y - start) / (end -start);
+			raycaste_images(var, x, y, wall_y);
+		}
+		else if (y <= start)
+			put_pixel_to_image(var, x, y, var->lx->ceiling);
+		else if (y >= end)
+			put_pixel_to_image(var, x, y, var->lx->floor);
 		y++;
 	}
 }
 
-void	projection(t_var *var)
+void	projectionSAVE(t_var *var, int x)
+{
+	int height_line;
+	int y;
+	int start;
+	int end;
+	double wall_y;
+
+	height_line = RESOLUTION/ var->dda->dist;
+	start  = (RESOLUTION - height_line)/2;
+	end  = (RESOLUTION + height_line)/2;
+	y = 0;
+	while (y < RESOLUTION)
+	{
+		if (start < y && y < end)
+		{
+			wall_y = (double)(y - start) / (end -start);
+			if (var->dda->side == 2 && (var->dda->vy <= 0))
+				put_pixel_to_image(var, x ,y, get_texture_color(var->tex[0], var->dda->wall_x * var->tex[0]->width, var->tex[0]->height * wall_y));
+			else if (var->dda->side == 2)
+				put_pixel_to_image(var, x ,y, get_texture_color(var->tex[1], var->dda->wall_x * var->tex[1]->width, var->tex[1]->height * wall_y));
+			if (var->dda->side == 1 && (var->dda->vx <= 0))
+				put_pixel_to_image(var, x ,y, get_texture_color(var->tex[2], var->dda->wall_x * var->tex[2]->width, var->tex[2]->height * wall_y));
+			else if (var->dda->side == 1)
+				put_pixel_to_image(var, x ,y, get_texture_color(var->tex[3], var->dda->wall_x * var->tex[3]->width, var->tex[3]->height * wall_y));
+		}
+		else if (y <= start)
+			put_pixel_to_image(var, x, y, var->lx->ceiling);
+		else if (y >= end)
+			put_pixel_to_image(var, x, y, var->lx->floor);
+		y++;
+	}
+}
+
+void	raycasting(t_var *var)
 {
 	double	X;
-	size_t	x;
+	double	x;
 
  	x = 0;
 	while (x < RESOLUTION)
@@ -449,21 +529,22 @@ void	projection(t_var *var)
 		var->ply->ray_dir_x = var->ply->vx + (X * var->ply->plan_x);
 		var->ply->ray_dir_y = var->ply->vy + (X * var->ply->plan_y);
 		dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
-		// draw_line(var, var->ply->pos_x * SCALE, var->ply->pos_y * SCALE, atan2(var->ply->ray_dir_y, var->ply->ray_dir_x), var->dda->dist * SCALE);
-		raycasting(var, x);
+		projection(var, x);
 		x++;
 	}
 }
 
 void	full_draw_squar(t_var *var, double x, double y, double size_x, double size_y, int color){
-	for (int j = y; j < y + size_y - 1; j++){
+	for (int j = y; j < y + size_y - 1; j++)
+	{
 		for (int i = x; i < x + size_x - 1; i++){
 			put_pixel_to_image(var, i,j, color);
 		}
 	}
 }
 
-void	full_draw_the_map(t_var *var){
+void	full_draw_the_map(t_var *var)
+{
 	for (int y = 0; var->pars->map[y]; y++){
 		for (int x = 0; var->pars->map[y][x]; x++){
 			if (var->pars->map[y][x] == '1')
@@ -565,7 +646,7 @@ int	draw(t_var *var)
 	int i, j;
 	char c;
 	reset_image(var);
-	projection(var);
+	raycasting(var);
 	// full_draw_the_map(var);
 	// full_draw_player(var);
 	draw_the_map(var);
@@ -663,6 +744,7 @@ void	cub3d(t_var *var)
 	var->lx->img = mlx_new_image(var->lx->mlx, RESOLUTION, RESOLUTION);
 	var->lx->addr = mlx_get_data_addr(var->lx->img, &var->lx->bits_per_pixel,
 			&var->lx->line_length, &var->lx->endian);
+	fill_texture(var);
 	mlx_hook(var->lx->win, ON_KEYDOWN, 0, downbind, var);
 	mlx_hook(var->lx->win, ON_KEYUP, 0, upbind, var);
 	mlx_hook(var->lx->win, ON_DESTROY, 0, xite, var);
@@ -670,6 +752,50 @@ void	cub3d(t_var *var)
 	mlx_loop_hook(var->lx->mlx, draw, var);
 	mlx_loop(var->lx->mlx);
 }
+
+
+t_tex	*fill_texture1(t_var *var, char *path)
+{
+	t_tex	*tex;
+
+	char *extention = ft_strrchr(path, '.');
+	if (extention && ft_strncmp(extention, ".xpm", 4) == 0)
+	{
+		tex = malloc(sizeof(t_tex));
+		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, &tex->width, &tex->height);
+		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, &tex->bpp, &tex->line_lenght, &tex->endian));
+		if (!tex->tex || !tex->ptr)
+		{
+			tex->tex && (mlx_destroy_image(var->lx->mlx, tex->tex));
+			free(tex);
+			return (NULL);
+		}
+		return (tex);
+	}
+	return (NULL);
+}
+
+
+void	fill_texture(t_var	*var)
+{
+	var->tex[0] = fill_texture1(var, var->pars->no[1]);
+	var->tex[1] = fill_texture1(var, var->pars->so[1]);
+	var->tex[2] = fill_texture1(var, var->pars->we[1]);
+	var->tex[3] = fill_texture1(var, var->pars->ea[1]);
+}
+
+int    get_texture_color(t_tex *tex, int x, int y)
+{
+	int *dist;
+
+	// if (x < 0 || x >= 64 || y < 0 || y >= 64)
+	// 	return (0);
+	x = x % 64;
+	dist = (int *)(tex->ptr + (y * tex->line_lenght + \
+			x * (tex->bpp / 8)));
+	return (*(dist));
+}
+
 
 int	main(int ac, char **av)
 {
@@ -681,7 +807,7 @@ int	main(int ac, char **av)
 	var->dda = malloc(sizeof(t_dda));
 
 	parsing(var, ac, av);
-
+	colors(var);
 	show_help();
 	show_control();
 	init(var);

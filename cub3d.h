@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/25 15:30:32 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/26 18:19:28 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,16 @@ enum {
 
 typedef struct s_mlx
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	char	*dst;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	char			*dst;
+	unsigned long	ceiling;
+	unsigned long	floor;
 }			t_mlx;
 
 typedef struct s_player
@@ -114,6 +116,9 @@ typedef struct s_dda
 	double	dist_y;
 	int side;
 	double dist;
+	double	wall_x;
+	double vx;
+	double vy;
 }			t_dda;
 
 typedef struct s_pars
@@ -141,14 +146,16 @@ typedef struct s_pars
 	int		line;
 }	t_pars;
 
-typedef struct s_text
+typedef struct s_tex
 {
-	void	*img[4];
-	char	*ptr;
-	char	*bbp;
-	int		line_length;
+	int		bpp;
 	int		endian;
-} 	t_text;
+	int		line_lenght;
+	void	*tex;
+	char	*ptr;
+	int		width;
+	int		height;
+} 	t_tex;
 
 typedef struct s_var
 {
@@ -156,10 +163,13 @@ typedef struct s_var
 	t_player	*ply;
 	t_dda		*dda;
 	t_pars		*pars;
-	t_text		*text;
+	t_tex		*tex[4];
 }				t_var;
 
 
+int		get_texture_color(t_tex *tex, int x, int y);
+void	fill_texture(t_var	*var);
+int		count_plus(char *str);
 int		ft_atoi_plus(char *str);
 char	*ft_join(char *s1);
 void	ft_error_fd(int fd);
@@ -183,7 +193,7 @@ int		check_file_no(t_var *var, int i, int j, int fd);
 int		check_file_so(t_var *var, int i, int j, int fd);
 int		check_file_we(t_var *var, int i, int j, int fd);
 int		check_file_ea(t_var *var, int i, int j, int fd);
-char	*fill_texture1(t_var *var, char *path);
+t_tex	*fill_texture1(t_var *var, char *path);
 void	fill_textue(t_var	*var);
 void	parsing(t_var *var, int ac, char **av);
 

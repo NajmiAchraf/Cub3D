@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:30:29 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 18:25:58 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 15:49:17 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	valid_map_line(t_var *var)
 	j = 0;
 	while (var->pars->map[0][j])
 	{
-		
 		if (var->pars->map[0][j] != '1' && var->pars->map[0][j] != ' ')
 			ft_error("Error from valid 2");
 		j++;

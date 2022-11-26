@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 19:55:23 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:03:40 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 17:33:41 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,39 @@ void	check_extension(int ac, char **av)
 		if (ft_strcmp(str, ".cub"))
 			ft_error("Error from arg");
 	}
+}
+void	ft_atoi_plus1(int k, int i, char *ptr)
+{
+	if (k != i || i > 4)
+		ft_error("Error from atoi 1");
+	free(ptr);
+}
+
+int	ft_atoi_plus(char *str)
+{
+	int	res;
+	int	i;
+	int	k;
+	char *ptr;
+
+	i = 0;
+	res = 0;
+	k = 0;
+	ptr = NULL;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]) && str[i] != ','
+			&& str[i] != ' ' && str[i] != '+')
+			ft_error("Error from atoi");
+		i++;
+	}
+	ptr = ft_strtrim(str, " ");
+	i = 0;
+	if (ptr[i] == '+')
+		i++;
+	k = count_plus(ptr);
+	while (ptr[i] >= '0' && ptr[i] <= '9')
+		res = res * 10 + ptr[i++] - '0';
+	ft_atoi_plus1( k, i, ptr);
+	return (res);
 }

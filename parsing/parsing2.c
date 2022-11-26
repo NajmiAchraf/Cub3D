@@ -6,13 +6,13 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:20:11 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/25 10:33:22 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/25 15:50:48 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void init_element(t_var *var)
+void	init_element(t_var *var)
 {
 	var->pars->zero = 0;
 	var->pars->one = 0;
@@ -45,8 +45,6 @@ void	check_map(t_var *var)
 	while (var->pars->map[i])
 	{
 		j = 0;
-		// printf("|||%s|||\n",var->pars->map[i]);
-		// printf("{%s}\n", var->pars->map[i]);
 		while (var->pars->map[i][j])
 		{
 			check_map2(var, i, j);
@@ -64,9 +62,9 @@ void	check_map(t_var *var)
 
 int	fill_map(t_var *var, int i, int len)
 {
-	int	j;
-	int	k;
-	static int flag;
+	int			j;
+	int			k;
+	static int	flag;
 
 	j = 0;
 	k = 0;
@@ -75,15 +73,11 @@ int	fill_map(t_var *var, int i, int len)
 		var->pars->map = malloc(sizeof(char *) * (len - i + 1));
 		while (var->pars->hold[i])
 		{
-			// printf("|||%s|||\n",var->pars->hold[i]);
-			var->pars->map[k] = var->pars->hold[i] ;
+			var->pars->map[k] = var->pars->hold[i];
 			k++;
 			i++;
 		}
 		var->pars->map[k] = NULL;
-		int f = -1;
-		// while (var->pars->map[++f])
-		// 	printf("{%s}\n", var->pars->map[f]);
 		check_map(var);
 		flag++;
 	}

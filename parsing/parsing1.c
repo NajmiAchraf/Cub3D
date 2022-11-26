@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:19:54 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:03:40 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/26 18:41:14 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	lent_map(char *str)
 		tmp = get_next_line(fd);
 		i++;
 	}
+	close(fd);
 	return (i);
 }
 

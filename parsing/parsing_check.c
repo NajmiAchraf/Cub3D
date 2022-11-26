@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:11:41 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/25 10:04:27 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/26 20:05:44 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	check_file3(t_var *var, int i, int j, int len)
 		if (!check_file_c(var, i, j))
 			return (0);
 	}
-	if (!var->pars->map1 && (var->pars->hold[i][j] == '1' || var->pars->hold[i][j] == ' '))
+	if (!var->pars->map1 && (var->pars->hold[i][j] == '1'
+		|| var->pars->hold[i][j] == ' '))
 	{
 		if (!fill_map(var, i, len))
 			return (0);

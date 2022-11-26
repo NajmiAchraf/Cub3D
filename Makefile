@@ -6,15 +6,15 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/25 14:42:51 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/26 19:37:00 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-CFLAGS = # -fsanitize=address # -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra # -fsanitize=address
 
-CC = cc 
+CC = cc
 
 PARSE = \
 		./parsing/parsing.c\
@@ -128,4 +128,4 @@ bonus :
 
 run :
 	@echo "$(C_L_BLUE)[RUN CUB3D!]$(C_RES)"
-	@./cub3D maps/map.cub
+	@./cub3D tools/maps/map.cub

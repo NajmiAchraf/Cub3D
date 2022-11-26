@@ -1,5 +1,5 @@
 while : 
 do 
-	leaks cub3d
+	leaks cub3D
 	sleep 2
 done
