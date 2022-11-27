@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:45:27 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 13:46:28 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:17:36 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,16 @@
 static t_tex	*fill_texture(t_var *var, char *path)
 {
 	t_tex	*tex;
+	char	*extention;
 
-	char *extention = ft_strrchr(path, '.');
+	extention = ft_strrchr(path, '.');
 	if (extention && ft_strncmp(extention, ".xpm", 4) == 0)
 	{
 		tex = malloc(sizeof(t_tex));
-		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, &tex->width, &tex->height);
-		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, &tex->bpp, &tex->line_lenght, &tex->endian));
+		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, \
+		&tex->width, &tex->height);
+		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, \
+		&tex->bpp, &tex->line_lenght, &tex->endian));
 		if (!tex->tex || !tex->ptr)
 		{
 			tex->tex && (mlx_destroy_image(var->lx->mlx, tex->tex));
@@ -41,14 +44,14 @@ void	fill_textures(t_var	*var)
 	var->tex[3] = fill_texture(var, var->pars->ea[1]);
 }
 
-static unsigned long create_rgb(int r, int g, int b)
+static unsigned long	create_rgb(int r, int g, int b)
 {
-	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
 }
 
 void	colors(t_var *var)
 {
-	char **ptr;
+	char	**ptr;
 
 	ptr = ft_split(var->pars->c[0], ' ');
 	var->lx->ceiling = create_rgb(ft_atoi(ptr[1]), \

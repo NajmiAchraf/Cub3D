@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:11:30 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:13:35 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:13:44 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	execute(int keycode, t_var *var)
 
 int	downbind(int keycode, t_var *var)
 {
-	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_A 
+	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_A
 		|| keycode == KY_S || keycode == KY_D || keycode == KY_W)
 		execute(keycode, var);
 	return (0);

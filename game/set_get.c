@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:28:13 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 16:10:01 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:39:40 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	mlp_rotation_matrix(double angle, double *x, double *y)
 {
-	double tmp;
+	double	tmp;
 
 	tmp = *x;
 	*x = cos(angle) * *x + sin(angle) * *y;

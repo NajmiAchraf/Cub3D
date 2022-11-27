@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:59:45 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:08:18 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:41:59 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	get_texture_color(t_tex *tex, int x, int y)
 {
-	int *dist;
+	int	*dist;
 
 	x = x % 64;
 	dist = (int *)(tex->ptr + (y * tex->line_lenght + \
@@ -24,7 +24,7 @@ static int	get_texture_color(t_tex *tex, int x, int y)
 
 static void	put_texture_to_image(t_var *var, int x, int y, double wall_y, int n)
 {
-	put_pixel_to_image(var, x ,y, get_texture_color(var->tex[n], \
+	put_pixel_to_image(var, x, y, get_texture_color(var->tex[n], \
 		var->dda->wall_x * var->tex[n]->width, var->tex[n]->height * wall_y));
 }
 
@@ -42,21 +42,21 @@ static void	raycaste_images(t_var *var, int x, int y, double wall_y)
 
 static void	projection(t_var *var, int x)
 {
-	int height_line;
-	int y;
-	int start;
-	int end;
-	double wall_y;
+	int		height_line;
+	int		y;
+	int		start;
+	int		end;
+	double	wall_y;
 
-	height_line = RESOLUTION/ var->dda->dist;
-	start  = (RESOLUTION - height_line)/2;
-	end  = (RESOLUTION + height_line)/2;
+	height_line = RESOLUTION / var->dda->dist;
+	start = (RESOLUTION - height_line) / 2;
+	end = (RESOLUTION + height_line) / 2;
 	y = 0;
 	while (y < RESOLUTION)
 	{
 		if (start < y && y < end)
 		{
-			wall_y = (double)(y - start) / (end -start);
+			wall_y = (double)(y - start) / (end - start);
 			raycaste_images(var, x, y, wall_y);
 		}
 		else if (y <= start)
@@ -69,16 +69,18 @@ static void	projection(t_var *var, int x)
 
 void	raycasting(t_var *var)
 {
-	double	X;
+	double	px;
 	double	x;
 
- 	x = 0;
+	x = 0;
 	while (x < RESOLUTION)
 	{
-		X = ((2.0 * x) - RESOLUTION) / (double)RESOLUTION;
-		var->ply->ray_dir_x = var->ply->vx + (X * var->ply->plan_x);
-		var->ply->ray_dir_y = var->ply->vy + (X * var->ply->plan_y);
-		dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->ray_dir_x, var->ply->ray_dir_y);
+		px = ((2.0 * x) - RESOLUTION) / (double)RESOLUTION;
+		var->ply->ray_dir_x = var->ply->vx + (px * var->ply->plan_x);
+		var->ply->ray_dir_y = var->ply->vy + (px * var->ply->plan_y);
+		var->dda->vx = var->ply->ray_dir_x;
+		var->dda->vy = var->ply->ray_dir_y;
+		dda(var, var->ply->pos_x, var->ply->pos_y);
 		projection(var, x);
 		x++;
 	}

@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:34:02 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:13:08 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ static int	draw(t_var *var)
 	var->lx->addr = mlx_get_data_addr(var->lx->img, &var->lx->bits_per_pixel,
 			&var->lx->line_length, &var->lx->endian);
 	raycasting(var);
-	// full_draw_the_map(var);
-	// full_draw_player(var);
 	draw_the_map(var);
 	draw_player(var);
 	mlx_put_image_to_window(var->lx->mlx, var->lx->win, var->lx->img, 0, 0);

@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 16:10:10 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:32:46 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,15 +165,6 @@ typedef struct s_var
 	t_tex		*tex[4];
 }				t_var;
 
-typedef struct s_gmie
-{
-	double	x;
-	double	y;
-	double	to_x;
-	double	to_y;
-	double	dx;
-	double	dy;
-}				t_gmie;
 
 int		count_plus(char *str);
 int		ft_atoi_plus(char *str);
@@ -209,7 +200,7 @@ void	colors(t_var *var);
 void	fill_textures(t_var	*var);
 void	raycasting(t_var *var);
 void	event(t_var *var);
-void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy);
+void	dda(t_var *var, double pos_x, double pos_y);
 void	mlp_rotation_matrix(double angle, double *x, double *y);
 char	get_map_index(t_var *var, double y, double x);
 

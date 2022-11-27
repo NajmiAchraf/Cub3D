@@ -6,16 +6,20 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:42:48 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 13:49:33 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:23:03 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	set_directions(t_var *var, double vx, double vy, double plan_x, double plan_y)
+static void	set_vectors(t_var *var, double vx, double vy)
 {
 	var->ply->vx = vx;
 	var->ply->vy = vy;
+}
+
+static void	set_plans(t_var *var, double plan_x, double plan_y)
+{
 	var->ply->plan_x = plan_x;
 	var->ply->plan_y = plan_y;
 }
@@ -23,20 +27,32 @@ static void	set_directions(t_var *var, double vx, double vy, double plan_x, doub
 static void	directions_player(t_var *var, char dir)
 {
 	if (dir == 'N')
-		set_directions(var, 0, -1, 0.5, 0);
+	{
+		set_vectors(var, 0, -1);
+		set_plans(var, 0.5, 0);
+	}
 	else if (dir == 'S')
-		set_directions(var, 0, 1, -0.5, 0);
+	{
+		set_vectors(var, 0, 1);
+		set_plans(var, -0.5, 0);
+	}
 	else if (dir == 'E')
-		set_directions(var, 1, 0, 0, 0.5);
+	{
+		set_vectors(var, 1, 0);
+		set_plans(var, 0, 0.5);
+	}
 	else if (dir == 'W')
-		set_directions(var, -1, 0, 0, -0.5);
+	{
+		set_vectors(var, -1, 0);
+		set_plans(var, 0, -0.5);
+	}
 }
 
 static void	change_map(t_var *var, int x, int y)
 {
-	char *old;
-	char *new;
-	int	 i;
+	char	*old;
+	char	*new;
+	int		i;
 
 	old = ft_strdup(var->pars->map[y]);
 	new = malloc((ft_strlen(old) + 1) * sizeof(char));

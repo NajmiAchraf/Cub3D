@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:50:20 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:43:34 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:35:13 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,9 @@ void	draw_player(t_var *var)
 		draw_circle(var, POS_PLY, POS_PLY, r);
 		r += 0.5;
 	}
-	dda(var, var->ply->pos_x, var->ply->pos_y, var->ply->vx, var->ply->vy);
+	var->dda->vx = var->ply->vx;
+	var->dda->vy = var->ply->vy;
+	dda(var, var->ply->pos_x, var->ply->pos_y);
 	if ((var->dda->dist * SCALE) > POS_PLY)
 		var->dda->dist = POS_PLY / SCALE;
 	draw_line(var, atan2(var->ply->vy, var->ply->vx));

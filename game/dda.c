@@ -6,29 +6,28 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:24:20 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:35:08 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:34:40 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	set_delta(t_var *var, double vx, double vy)
+static void	set_delta(t_var *var)
 {
-	// var->dda->len_ray = sqrt(vx * vx + vy *vy);
 	var->dda->len_ray = 1;
-	if (vx)
-		var->dda->delta_x = var->dda->len_ray / fabs(vx);
+	if (var->dda->vx)
+		var->dda->delta_x = var->dda->len_ray / fabs(var->dda->vx);
 	else
 		var->dda->delta_x = 1e30;
-	if (vy)
-		var->dda->delta_y = var->dda->len_ray / fabs(vy);
+	if (var->dda->vy)
+		var->dda->delta_y = var->dda->len_ray / fabs(var->dda->vy);
 	else
 		var->dda->delta_y = 1e30;
 }
 
-static void	set_pos_x(t_var *var, double pos_x, double vx)
+static void	set_pos_x(t_var *var, double pos_x)
 {
-	if (vx >= 0)
+	if (var->dda->vx >= 0)
 	{
 		var->dda->step_x = 1;
 		var->dda->map_x = (int)pos_x;
@@ -42,9 +41,9 @@ static void	set_pos_x(t_var *var, double pos_x, double vx)
 	}
 }
 
-static void	set_pos_y(t_var *var, double pos_y, double vy)
+static void	set_pos_y(t_var *var, double pos_y)
 {
-	if (vy >= 0)
+	if (var->dda->vy >= 0)
 	{
 		var->dda->step_y = 1;
 		var->dda->map_y = (int)pos_y;
@@ -62,7 +61,8 @@ static void	differential_analyzer(t_var *var)
 {
 	while (1)
 	{
-		if (var->dda->dist_x < var->dda->dist_y){
+		if (var->dda->dist_x < var->dda->dist_y)
+		{
 			var->dda->dist_x += var->dda->delta_x;
 			var->dda->map_x += var->dda->step_x;
 			var->dda->side = 1;
@@ -79,25 +79,23 @@ static void	differential_analyzer(t_var *var)
 }
 
 /* Digital differential analyzer */
-void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy)
+void	dda(t_var *var, double pos_x, double pos_y)
 {
-	var->dda->vx = vx;
-	var->dda->vy = vy;
-	set_delta(var, vx, vy);
-	set_pos_x(var, pos_x, vx);
-	set_pos_y(var, pos_y, vy);
+	set_delta(var);
+	set_pos_x(var, pos_x);
+	set_pos_y(var, pos_y);
 	differential_analyzer(var);
 	var->dda->dist = 0;
 	var->dda->wall_x = 0;
 	if (var->dda->side == 1)
 	{
 		var->dda->dist = (var->dda->dist_x - var->dda->delta_x);
-		var->dda->wall_x = pos_y + var->dda->dist * vy;
+		var->dda->wall_x = pos_y + var->dda->dist * var->dda->vy;
 	}
 	else if (var->dda->side == 2)
 	{
 		var->dda->dist = (var->dda->dist_y - var->dda->delta_y);
-		var->dda->wall_x = pos_x + var->dda->dist * vx;
+		var->dda->wall_x = pos_x + var->dda->dist * var->dda->vx;
 	}
 	var->dda->wall_x = var->dda->wall_x - (int) var->dda->wall_x;
 }
