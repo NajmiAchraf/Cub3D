@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:59:45 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 16:41:59 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 17:23:09 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,23 @@ static int	get_texture_color(t_tex *tex, int x, int y)
 	return (*(dist));
 }
 
-static void	put_texture_to_image(t_var *var, int x, int y, double wall_y, int n)
+static void	put_texture_to_image(t_var *var, int x, int y, int n)
 {
 	put_pixel_to_image(var, x, y, get_texture_color(var->tex[n], \
-		var->dda->wall_x * var->tex[n]->width, var->tex[n]->height * wall_y));
+		var->dda->wall_x * var->tex[n]->width, var->tex[n]->height \
+		* var->dda->wall_y));
 }
 
-static void	raycaste_images(t_var *var, int x, int y, double wall_y)
+static void	raycaste_images(t_var *var, int x, int y)
 {
 	if (var->dda->side == 2 && var->dda->vy <= 0)
-		put_texture_to_image(var, x, y, wall_y, 0);
+		put_texture_to_image(var, x, y, 0);
 	else if (var->dda->side == 2)
-		put_texture_to_image(var, x, y, wall_y, 1);
+		put_texture_to_image(var, x, y, 1);
 	if (var->dda->side == 1 && var->dda->vx <= 0)
-		put_texture_to_image(var, x, y, wall_y, 2);
+		put_texture_to_image(var, x, y, 2);
 	else if (var->dda->side == 1)
-		put_texture_to_image(var, x, y, wall_y, 3);
+		put_texture_to_image(var, x, y, 3);
 }
 
 static void	projection(t_var *var, int x)
@@ -46,7 +47,6 @@ static void	projection(t_var *var, int x)
 	int		y;
 	int		start;
 	int		end;
-	double	wall_y;
 
 	height_line = RESOLUTION / var->dda->dist;
 	start = (RESOLUTION - height_line) / 2;
@@ -56,8 +56,8 @@ static void	projection(t_var *var, int x)
 	{
 		if (start < y && y < end)
 		{
-			wall_y = (double)(y - start) / (end - start);
-			raycaste_images(var, x, y, wall_y);
+			var->dda->wall_y = (double)(y - start) / (end - start);
+			raycaste_images(var, x, y);
 		}
 		else if (y <= start)
 			put_pixel_to_image(var, x, y, var->lx->ceiling);

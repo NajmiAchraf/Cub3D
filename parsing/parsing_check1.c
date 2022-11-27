@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:12:06 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 11:14:36 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 17:10:10 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	check_file_no(t_var *var, int i, int fd)
 	if (fd < 0 || var->pars->nn == 1 || num != 2)
 		ft_error("Error from fd NO");
 	var->pars->nn = 1;
+	close (fd);
 	return (0);
 }
 
@@ -39,6 +40,7 @@ int	check_file_so(t_var *var, int i, int fd)
 	if (fd < 0 || var->pars->ss == 1 || num != 2)
 		ft_error("Error from fd SO");
 	var->pars->ss = 1;
+	close (fd);
 	return (0);
 }
 
@@ -54,6 +56,7 @@ int	check_file_we(t_var *var, int i, int fd)
 	if (fd < 0 || var->pars->ww == 1 || num != 2)
 		ft_error("Error from fd WE");
 	var->pars->ww = 1;
+	close (fd);
 	return (0);
 }
 
@@ -69,5 +72,6 @@ int	check_file_ea(t_var *var, int i, int fd)
 	if (fd < 0 || var->pars->ee == 1 || num != 2)
 		ft_error("Error from fd EA");
 	var->pars->ee = 1;
+	close (fd);
 	return (0);
 }

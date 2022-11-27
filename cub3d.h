@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 16:32:46 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 17:21:32 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_dda
 	int		side;
 	double	dist;
 	double	wall_x;
+	double	wall_y;
 	double	vx;
 	double	vy;
 }			t_dda;
@@ -164,7 +165,6 @@ typedef struct s_var
 	t_pars		*pars;
 	t_tex		*tex[4];
 }				t_var;
-
 
 int		count_plus(char *str);
 int		ft_atoi_plus(char *str);
