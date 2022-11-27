@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:06:02 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 18:39:55 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,8 +191,6 @@ int		check_file_so(t_var *var, int i, int fd);
 int		check_file_we(t_var *var, int i, int fd);
 int		check_file_ea(t_var *var, int i, int fd);
 void	parsing(t_var *var, int ac, char **av);
-void	show_help(void);
-void	show_control(void);
 
 void	put_pixel_to_image(t_var *var, int x, int y, int color);
 void	player_set(t_var *var);

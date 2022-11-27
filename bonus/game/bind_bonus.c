@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:11:30 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 18:45:45 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	mouse_position(int x, int y, t_var *var)
 {
 	static int	old_x;
 
+	if (!old_x)
+		old_x = x;
 	if (old_x > x && y >= 0)
 	{
 		mlp_rotation_matrix(MOUSE_ROT_SPEED * (old_x - x), \
