@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/27 14:33:26 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/27 16:03:13 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,6 @@ EXEC = \
 	./game/dda.c					\
 	./game/draw_mini_map_bonus.c	\
 	./game/events.c					\
-	./game/gmie.c					\
 	./game/init_colors.c			\
 	./game/init_player.c			\
 	./game/raycasting.c				\

@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 15:14:53 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:10:10 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,8 +211,7 @@ void	raycasting(t_var *var);
 void	event(t_var *var);
 void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy);
 void	mlp_rotation_matrix(double angle, double *x, double *y);
-char	get_map_index(t_var *var, double x, double y);
-char	gmie(t_var *var, double to_x, double to_y);
+char	get_map_index(t_var *var, double y, double x);
 
 /* BINDS || HOOKS */
 int		downbind(int keycode, t_var *var);

@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:28:13 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 14:28:26 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 16:10:01 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	mlp_rotation_matrix(double angle, double *x, double *y)
 	*y = -sin(angle) * tmp + cos(angle) * *y;
 }
 
-char	get_map_index(t_var *var, double x, double y)
+char	get_map_index(t_var *var, double y, double x)
 {
-	int c;
+	int	c;
 
 	c = '_';
 	if (var->pars->map[(int)y])
