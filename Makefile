@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/27 18:11:11 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/27 18:19:02 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = cub3D
 
 NAME_BONUS = cub3D_bonus
 
-CFLAGS = -Wall -Werror -Wextra # -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra
 
 CC = cc
 
@@ -129,7 +129,7 @@ C_RES = \033[0m
 %.o: %.c
 	@$(CC) $(CFLAGS) $(MLXINC) -c $^ -o $@
 
-all : $(NAME) run
+all : $(NAME)
 
 $(NAME) : $(OBJ)
 	$(ALLIBFT)
@@ -138,7 +138,7 @@ $(NAME) : $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(ARLIB) $(ARPLS) $(ARGNL) $(MLXLIB) -o $(NAME)
 	@echo "$(C_GREEN)[CUB3D MANDATORY CREATED!]$(C_RES)"
 
-bonus : $(NAME_BONUS) runbonus
+bonus : $(NAME_BONUS)
 
 $(NAME_BONUS) : $(OBJ_BONUS)
 	$(ALLIBFT)
@@ -167,7 +167,6 @@ fclean : clean
 	@echo "$(C_RED)[CUB3D EXECUTABLES DELETED!]$(C_RES)"
 
 re : fclean all
-
 
 run :
 	@echo "$(C_L_BLUE)[RUN CUB3D!]$(C_RES)"
