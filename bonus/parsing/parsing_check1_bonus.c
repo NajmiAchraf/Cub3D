@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_check1.c                                   :+:      :+:    :+:   */
+/*   parsing_check1_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:12:06 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 17:10:10 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3d_bonus.h"
 
 int	check_file_no(t_var *var, int i, int fd)
 {

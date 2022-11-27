@@ -6,11 +6,11 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:05:37 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 18:10:01 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "cub3d_bonus.h"
 
 void	put_pixel_to_image(t_var *var, int x, int y, int color)
 {

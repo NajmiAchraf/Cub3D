@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   raycasting_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:59:45 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 17:23:09 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3d_bonus.h"
 
 static int	get_texture_color(t_tex *tex, int x, int y)
 {

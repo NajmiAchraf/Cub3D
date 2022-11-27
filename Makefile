@@ -6,7 +6,7 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/27 18:03:43 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/27 18:11:11 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,53 +19,53 @@ CFLAGS = -Wall -Werror -Wextra # -fsanitize=address
 CC = cc
 
 PARSE = \
-		parsing/parsing.c			\
-		parsing/parsing_check.c		\
-		parsing/parsing_check1.c	\
-		parsing/parsing1.c			\
-		parsing/parsing2.c			\
-		parsing/parsing3.c			\
-		parsing/parsing4.c			\
-		parsing/parsing_utils.c		\
-		parsing/parsing_utils1.c	\
+		./mandatory/parsing/parsing.c			\
+		./mandatory/parsing/parsing_check.c		\
+		./mandatory/parsing/parsing_check1.c	\
+		./mandatory/parsing/parsing1.c			\
+		./mandatory/parsing/parsing2.c			\
+		./mandatory/parsing/parsing3.c			\
+		./mandatory/parsing/parsing4.c			\
+		./mandatory/parsing/parsing_utils.c		\
+		./mandatory/parsing/parsing_utils1.c	\
 
 EXEC = \
-	game/bind.c					\
-	game/dda.c					\
-	game/events.c				\
-	game/init_colors.c			\
-	game/init_player.c			\
-	game/raycasting.c			\
-	game/set_get.c				\
-	cub3d.c						\
+	./mandatory/game/bind.c					\
+	./mandatory/game/dda.c					\
+	./mandatory/game/events.c				\
+	./mandatory/game/init_colors.c			\
+	./mandatory/game/init_player.c			\
+	./mandatory/game/raycasting.c			\
+	./mandatory/game/set_get.c				\
+	./mandatory/cub3d.c						\
 
 PARSE_BONUS = \
-		parsing/parsing_bonus.c			\
-		parsing/parsing_check_bonus.c	\
-		parsing/parsing_check1_bonus.c	\
-		parsing/parsing1_bonus.c		\
-		parsing/parsing2_bonus.c		\
-		parsing/parsing3_bonus.c		\
-		parsing/parsing4_bonus.c		\
-		parsing/parsing_utils_bonus.c	\
-		parsing/parsing_utils1_bonus.c	\
+		./bonus/parsing/parsing_bonus.c			\
+		./bonus/parsing/parsing_check_bonus.c	\
+		./bonus/parsing/parsing_check1_bonus.c	\
+		./bonus/parsing/parsing1_bonus.c		\
+		./bonus/parsing/parsing2_bonus.c		\
+		./bonus/parsing/parsing3_bonus.c		\
+		./bonus/parsing/parsing4_bonus.c		\
+		./bonus/parsing/parsing_utils_bonus.c	\
+		./bonus/parsing/parsing_utils1_bonus.c	\
 
 EXEC_BONUS = \
-	game/bind_bonus.c			\
-	game/dda_bonus.c			\
-	game/draw_mini_map_bonus.c	\
-	game/events_bonus.c			\
-	game/init_colors_bonus.c	\
-	game/init_player_bonus.c	\
-	game/raycasting_bonus.c		\
-	game/set_get_bonus.c		\
-	cub3d_bonus.c				\
+	./bonus/game/bind_bonus.c			\
+	./bonus/game/dda_bonus.c			\
+	./bonus/game/draw_mini_map_bonus.c	\
+	./bonus/game/events_bonus.c			\
+	./bonus/game/init_colors_bonus.c	\
+	./bonus/game/init_player_bonus.c	\
+	./bonus/game/raycasting_bonus.c		\
+	./bonus/game/set_get_bonus.c		\
+	./bonus/cub3d_bonus.c				\
 
-SRCS = ./mandatory/$(PARSE) ./mandatory/$(EXEC)
+SRCS = $(PARSE) $(EXEC)
 
 OBJ = $(SRCS:.c=.o)
 
-SRCS_BONUS = ./bonus/$(PARSE_BONUS) ./bonus/$(EXEC_BONUS)
+SRCS_BONUS = $(PARSE_BONUS) $(EXEC_BONUS)
 
 OBJ_BONUS = $(SRCS_BONUS:.c=.o)
 

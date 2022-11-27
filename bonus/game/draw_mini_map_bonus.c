@@ -6,11 +6,11 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:50:20 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 16:35:13 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../cub3d_bonus.h"
 
 static void	draw_line(t_var *var, double slope)
 {
