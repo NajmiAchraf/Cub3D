@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 11:41:54 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/26 20:06:24 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 11:25:29 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	check_file(t_var *var, int len)
 
 	i = 0;
 	j = 0;
+	fd = 0;
 	while (var->pars->hold[i])
 	{
 		j = 0;
@@ -81,5 +82,4 @@ void	parsing(t_var *var, int ac, char **av)
 	if (!len)
 		ft_error("Error file empty");
 	check_file(var, len);
-	// system("leaks cub3D");
 }

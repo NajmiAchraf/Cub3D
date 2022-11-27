@@ -6,13 +6,13 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:12:06 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 20:13:04 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 11:14:36 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	check_file_no(t_var *var, int i, int j, int fd)
+int	check_file_no(t_var *var, int i, int fd)
 {
 	int	num;
 
@@ -27,7 +27,7 @@ int	check_file_no(t_var *var, int i, int j, int fd)
 	return (0);
 }
 
-int	check_file_so(t_var *var, int i, int j, int fd)
+int	check_file_so(t_var *var, int i, int fd)
 {
 	int	num;
 
@@ -42,7 +42,7 @@ int	check_file_so(t_var *var, int i, int j, int fd)
 	return (0);
 }
 
-int	check_file_we(t_var *var, int i, int j, int fd)
+int	check_file_we(t_var *var, int i, int fd)
 {
 	int	num;
 
@@ -57,7 +57,7 @@ int	check_file_we(t_var *var, int i, int j, int fd)
 	return (0);
 }
 
-int	check_file_ea(t_var *var, int i, int j, int fd)
+int	check_file_ea(t_var *var, int i, int fd)
 {
 	int	num;
 

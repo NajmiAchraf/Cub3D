@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/26 18:19:28 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 15:14:53 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ enum {
 	CYAN = 0x00ABCDEF,
 	CREAMY = 0x00FEDCBA,
 	PISTASH = 0x00DCFEBA
-
 };
 
 typedef struct s_mlx
@@ -94,7 +93,7 @@ typedef struct s_player
 	double	pos_y;
 	double	plan_x;
 	double	plan_y;
-	double 	vx;
+	double	vx;
 	double	vy;
 	double	step_x;
 	double	step_y;
@@ -108,17 +107,17 @@ typedef struct s_dda
 	double	delta_x;
 	double	delta_y;
 	double	len_ray;
-	int step_x;
-	int	step_y;
-	int	map_x;
-	int	map_y;
+	int		step_x;
+	int		step_y;
+	int		map_x;
+	int		map_y;
 	double	dist_x;
 	double	dist_y;
-	int side;
-	double dist;
+	int		side;
+	double	dist;
 	double	wall_x;
-	double vx;
-	double vy;
+	double	vx;
+	double	vy;
 }			t_dda;
 
 typedef struct s_pars
@@ -155,7 +154,7 @@ typedef struct s_tex
 	char	*ptr;
 	int		width;
 	int		height;
-} 	t_tex;
+}			t_tex;
 
 typedef struct s_var
 {
@@ -166,9 +165,16 @@ typedef struct s_var
 	t_tex		*tex[4];
 }				t_var;
 
+typedef struct s_gmie
+{
+	double	x;
+	double	y;
+	double	to_x;
+	double	to_y;
+	double	dx;
+	double	dy;
+}				t_gmie;
 
-int		get_texture_color(t_tex *tex, int x, int y);
-void	fill_texture(t_var	*var);
 int		count_plus(char *str);
 int		ft_atoi_plus(char *str);
 char	*ft_join(char *s1);
@@ -189,18 +195,33 @@ void	check_map2(t_var *var, int i, int j);
 int		fill_map(t_var *var, int i, int len);
 int		check_file2(t_var *var, int i, int j, int fd);
 int		check_file3(t_var *var, int i, int j, int len);
-int		check_file_no(t_var *var, int i, int j, int fd);
-int		check_file_so(t_var *var, int i, int j, int fd);
-int		check_file_we(t_var *var, int i, int j, int fd);
-int		check_file_ea(t_var *var, int i, int j, int fd);
-t_tex	*fill_texture1(t_var *var, char *path);
-void	fill_textue(t_var	*var);
+int		check_file_no(t_var *var, int i, int fd);
+int		check_file_so(t_var *var, int i, int fd);
+int		check_file_we(t_var *var, int i, int fd);
+int		check_file_ea(t_var *var, int i, int fd);
 void	parsing(t_var *var, int ac, char **av);
-
-
-
-
 void	show_help(void);
 void	show_control(void);
+
+void	put_pixel_to_image(t_var *var, int x, int y, int color);
+void	player_set(t_var *var);
+void	colors(t_var *var);
+void	fill_textures(t_var	*var);
+void	raycasting(t_var *var);
+void	event(t_var *var);
+void	dda(t_var *var, double pos_x, double pos_y, double vx, double vy);
+void	mlp_rotation_matrix(double angle, double *x, double *y);
+char	get_map_index(t_var *var, double x, double y);
+char	gmie(t_var *var, double to_x, double to_y);
+
+/* BINDS || HOOKS */
+int		downbind(int keycode, t_var *var);
+int		upbind(int keycode, t_var *var);
+int		mouse_position(int x, int y, t_var *var);
+int		xite(void);
+
+/* BONUS */
+void	draw_the_map(t_var *var);
+void	draw_player(t_var *var);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 11:42:16 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/25 17:28:33 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 11:18:22 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ char	*alloc_ptr(char *s1)
 {
 	char	*ptr;
 
+	ptr = NULL;
 	if (ft_strchr(s1, '\n'))
 		ptr = malloc((ft_strlen (s1)) * sizeof(char));
 	else if (ft_strchr(s1, '\0'))
@@ -52,7 +53,6 @@ char	*ft_join(char *s1)
 {
 	char	*ptr;
 	int		i;
-	int		k;
 
 	if (!s1)
 		s1 = ft_join1();
@@ -90,6 +90,5 @@ int	count_plus(char *str)
 	}
 	if (k > 1)
 		ft_error("Error from atoi");
-	// free(str);
 	return (i);
 }

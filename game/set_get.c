@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftplus.h                                        :+:      :+:    :+:   */
+/*   set_get.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 11:58:11 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 15:21:33 by anajmi           ###   ########.fr       */
+/*   Created: 2022/11/27 14:28:13 by anajmi            #+#    #+#             */
+/*   Updated: 2022/11/27 14:28:26 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTPLUS_H
-# define LIBFTPLUS_H
-# include <stddef.h>
-# include <stdlib.h>
-# include "../Libft/libft.h"
+#include "../cub3d.h"
 
-int		ft_strch(char *src, char c);
-int		ft_strcmp(const char *s1, const char *s2);
-void	ft_free(char **ptr);
-#endif
+void	mlp_rotation_matrix(double angle, double *x, double *y)
+{
+	double tmp;
+
+	tmp = *x;
+	*x = cos(angle) * *x + sin(angle) * *y;
+	*y = -sin(angle) * tmp + cos(angle) * *y;
+}
+
+char	get_map_index(t_var *var, double x, double y)
+{
+	int c;
+
+	c = '_';
+	if (var->pars->map[(int)y])
+		c = var->pars->map[(int)y][(int)x];
+	return (c);
+}

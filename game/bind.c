@@ -1,0 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bind.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/27 14:11:30 by anajmi            #+#    #+#             */
+/*   Updated: 2022/11/27 14:13:35 by anajmi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../cub3d.h"
+
+static void	execute(int keycode, t_var *var)
+{
+	if (keycode == KY_A)
+	{
+		var->ply->move[0] = KY_A;
+		var->ply->step_x = -SPEED;
+	}
+	else if (keycode == KY_D)
+	{
+		var->ply->move[0] = KY_D;
+		var->ply->step_x = SPEED;
+	}
+	else if (keycode == KY_S)
+	{
+		var->ply->move[1] = KY_S;
+		var->ply->step_y = -SPEED;
+	}
+	else if (keycode == KY_W)
+	{
+		var->ply->move[1] = KY_W;
+		var->ply->step_y = SPEED;
+	}
+	else if (keycode == KY_LEFT)
+		var->ply->move[2] = KY_LEFT;
+	else if (keycode == KY_RIGHT)
+		var->ply->move[2] = KY_RIGHT;
+}
+
+int	downbind(int keycode, t_var *var)
+{
+	if (keycode == KY_LEFT || keycode == KY_RIGHT || keycode == KY_A 
+		|| keycode == KY_S || keycode == KY_D || keycode == KY_W)
+		execute(keycode, var);
+	return (0);
+}
+
+int	upbind(int keycode, t_var *var)
+{
+	if (keycode == KY_ESC)
+	{
+		mlx_destroy_window(var->lx->mlx, var->lx->win);
+		exit(1);
+	}
+	if (keycode == KY_A || keycode == KY_D)
+		var->ply->move[0] = -1;
+	if (keycode == KY_S || keycode == KY_W)
+		var->ply->move[1] = -1;
+	if (keycode == KY_LEFT || keycode == KY_RIGHT)
+		var->ply->move[2] = -1;
+	return (0);
+}
+
+int	mouse_position(int x, int y, t_var *var)
+{
+	static int	old_x;
+
+	if (old_x > x && y >= 0)
+	{
+		mlp_rotation_matrix(MOUSE_ROT_SPEED * (old_x - x), \
+			&var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(MOUSE_ROT_SPEED * (old_x - x), \
+			&var->ply->plan_x, &var->ply->plan_y);
+	}
+	else if (old_x < x && y >= 0)
+	{
+		mlp_rotation_matrix(-MOUSE_ROT_SPEED * (x - old_x), \
+			&var->ply->vx, &var->ply->vy);
+		mlp_rotation_matrix(-MOUSE_ROT_SPEED * (x - old_x), \
+			&var->ply->plan_x, &var->ply->plan_y);
+	}
+	old_x = x;
+	return (0);
+}
+
+int	xite(void)
+{
+	exit(0);
+	return (0);
+}

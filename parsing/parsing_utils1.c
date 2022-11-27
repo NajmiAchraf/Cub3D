@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 19:55:23 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/25 17:33:41 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 13:30:00 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	check_extension(int ac, char **av)
 	char	*str;
 
 	if (ac != 2)
+	{
 		ft_error("Error from arg");
+		show_help();
+	}
 	str = ft_strrchr(av[1], '.');
 	if (str)
 	{
@@ -40,6 +43,7 @@ void	check_extension(int ac, char **av)
 			ft_error("Error from arg");
 	}
 }
+
 void	ft_atoi_plus1(int k, int i, char *ptr)
 {
 	if (k != i || i > 4)
@@ -49,10 +53,10 @@ void	ft_atoi_plus1(int k, int i, char *ptr)
 
 int	ft_atoi_plus(char *str)
 {
-	int	res;
-	int	i;
-	int	k;
-	char *ptr;
+	int		res;
+	int		i;
+	int		k;
+	char	*ptr;
 
 	i = 0;
 	res = 0;
@@ -72,6 +76,6 @@ int	ft_atoi_plus(char *str)
 	k = count_plus(ptr);
 	while (ptr[i] >= '0' && ptr[i] <= '9')
 		res = res * 10 + ptr[i++] - '0';
-	ft_atoi_plus1( k, i, ptr);
+	ft_atoi_plus1(k, i, ptr);
 	return (res);
 }

@@ -6,13 +6,13 @@
 #    By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/08 17:43:40 by anajmi            #+#    #+#              #
-#    Updated: 2022/11/26 20:21:08 by anajmi           ###   ########.fr        #
+#    Updated: 2022/11/27 14:33:26 by anajmi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3D
 
-CFLAGS = -Wall -Werror -Wextra # -fsanitize=address
+CFLAGS = # -Wall -Werror -Wextra # -fsanitize=address
 
 CC = cc
 
@@ -28,8 +28,17 @@ PARSE = \
 		./parsing/parsing_utils1.c\
 
 EXEC = \
-	./cub3d.c	\
-	./help.c	\
+	./game/bind.c					\
+	./game/dda.c					\
+	./game/draw_mini_map_bonus.c	\
+	./game/events.c					\
+	./game/gmie.c					\
+	./game/init_colors.c			\
+	./game/init_player.c			\
+	./game/raycasting.c				\
+	./game/set_get.c				\
+	./cub3d.c						\
+	./help.c						\
 
 SRCS = $(PARSE) $(EXEC)
 
