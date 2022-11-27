@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 15:00:07 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 15:21:49 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/27 17:43:30 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,28 @@ void	ft_free(char **ptr)
 		free(ptr[i]);
 		i++;
 	}
+}
+
+void	show_help(void)
+{
+	ft_putstr_fd("----------------------------------------------", 1);
+	ft_putstr_fd("---------------------------\n", 1);
+	ft_putstr_fd("| Usage : ./cub3D [Path of MAP]\t\t\t\t\t\t|\n", 1);
+	ft_putstr_fd("----------------------------------------------", 1);
+	ft_putstr_fd("---------------------------\n", 1);
+	ft_putstr_fd("|\tPath of MAP :\t\t\t\t\t\t\t|\n", 1);
+	ft_putstr_fd("|\t\trelative : maps/map*.cub\t\t\t\t|\n", 1);
+	ft_putstr_fd("----------------------------------------------", 1);
+	ft_putstr_fd("---------------------------\n", 1);
+}
+
+void	show_control(void)
+{
+	ft_putstr_fd("----------------------------------------------", 1);
+	ft_putstr_fd("---------------------------\n", 1);
+	ft_putstr_fd("| Controls :\t\t\t\t\t\t\t\t|\n", 1);
+	ft_putstr_fd("|\tMove : W / S / A / D   \t\t\t\t\t\t|\n", 1);
+	ft_putstr_fd("|\tRotate : Left / Right | Mouse\t\t\t\t\t|\n", 1);
+	ft_putstr_fd("----------------------------------------------", 1);
+	ft_putstr_fd("---------------------------\n", 1);
 }

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 17:21:32 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/27 18:06:02 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -19,9 +19,9 @@
 # include <fcntl.h>
 # include <math.h>
 # include <mlx.h>
-# include "Libft/libft.h"
-# include "LibftPlus/libftplus.h"
-# include "get_next_line/get_next_line.h"
+# include "../Libft/libft.h"
+# include "../LibftPlus/libftplus.h"
+# include "../get_next_line/get_next_line.h"
 
 /*
 keyboard binds
