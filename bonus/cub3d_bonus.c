@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/28 15:19:59 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 19:58:27 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int ac, char **av)
 	var->ply = malloc(sizeof(t_player));
 	var->dda = malloc(sizeof(t_dda));
 	parsing(var, ac, av);
-	show_control();
+	show_control(1);
 	init(var);
 	cub3d(var);
 	return (0);

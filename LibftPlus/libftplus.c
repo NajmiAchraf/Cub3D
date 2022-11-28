@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 15:00:07 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/28 14:36:13 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 19:58:57 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,16 @@ void	show_help(void)
 	printf("---------------------------\n");
 }
 
-void	show_control(void)
+void	show_control(int bonus)
 {
 	printf("----------------------------------------------");
 	printf("---------------------------\n");
 	printf("| Controls :\t\t\t\t\t\t\t\t|\n");
 	printf("|\tMove : W / S / A / D   \t\t\t\t\t\t|\n");
-	printf("|\tRotate : Left / Right | Mouse\t\t\t\t\t|\n");
+	if (bonus)
+		printf("|\tRotate : Left / Right | Mouse\t\t\t\t\t|\n");
+	else
+		printf("|\tRotate : Left / Right\t\t\t\t\t\t|\n");
 	printf("----------------------------------------------");
 	printf("---------------------------\n");
 }
