@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:39:55 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 13:37:45 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ void	check_f_range(t_var *var, char *str);
 void	check_c_range(t_var *var, char *str);
 void	check_map2(t_var *var, int i, int j);
 int		fill_map(t_var *var, int i, int len);
-int		check_file2(t_var *var, int i, int j, int fd);
+int		check_file2(t_var *var, int i, int j);
 int		check_file3(t_var *var, int i, int j, int len);
 int		check_file_no(t_var *var, int i, int fd);
 int		check_file_so(t_var *var, int i, int fd);

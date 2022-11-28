@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils1_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 19:55:23 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 10:52:14 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_error_fd(int fd)
 {
 	if (fd < 0)
 	{
-		printf("Error\nfrom fd");
+		printf("Error\nfrom FD");
 		exit(1);
 	}	
 }

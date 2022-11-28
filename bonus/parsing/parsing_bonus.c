@@ -3,24 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 11:41:54 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 10:37:08 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d_bonus.h"
 
+void	check_only_space(char *str)
+{
+	int	i;
+	int	k;
+
+	i = 0;
+	k = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ')
+			k++;
+		i++;
+	}
+	if (k == i)
+		ft_error("Error from only space");
+}
+
 void	check_file(t_var *var, int len)
 {
 	int	i;
-	int	fd;
 	int	j;
 
 	i = 0;
-	j = 0;
-	fd = 0;
 	while (var->pars->hold[i])
 	{
 		j = 0;
@@ -28,11 +42,13 @@ void	check_file(t_var *var, int len)
 		{
 			if (var->pars->hold[i][j] != ' ')
 			{
-				if (!check_file2(var, i, j, fd) || !check_file3(var, i, j, len))
+				if (!check_file2(var, i, j) || !check_file3(var, i, j, len))
 					break ;
 			}
 			j++;
 		}
+		if (ft_strch(var->pars->hold[i], ' '))
+			check_only_space(var->pars->hold[i]);
 		i++;
 	}
 	if (!var->pars->nn || !var->pars->ss || !var->pars->ww

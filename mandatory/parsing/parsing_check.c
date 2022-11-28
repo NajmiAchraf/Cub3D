@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
+/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 18:11:41 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/27 13:21:13 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 10:22:28 by sriyani          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,11 @@ int	check_file_c(t_var *var, int i)
 	return (0);
 }
 
-int	check_file2(t_var *var, int i, int j, int fd)
+int	check_file2(t_var *var, int i, int j)
 {
+	int	fd;
+
+	fd = 0;
 	if ((var->pars->hold[i][j] == 'N' && var->pars->hold[i][j + 1] == 'O'))
 	{
 		if (!check_file_no(var, i, fd))
