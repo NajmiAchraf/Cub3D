@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 14:11:30 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:45:45 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 15:34:43 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	upbind(int keycode, t_var *var)
 	if (keycode == KY_ESC)
 	{
 		mlx_destroy_window(var->lx->mlx, var->lx->win);
-		exit(1);
+		xite();
 	}
 	if (keycode == KY_A || keycode == KY_D)
 		var->ply->move[0] = -1;
