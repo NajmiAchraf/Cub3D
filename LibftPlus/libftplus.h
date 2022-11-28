@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 11:58:11 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 17:43:45 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 14:39:07 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFTPLUS_H
 # include <stddef.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include "../Libft/libft.h"
 
 int		ft_strch(char *src, char c);

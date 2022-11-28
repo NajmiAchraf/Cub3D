@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:40:39 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/28 13:37:45 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 14:44:24 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ keyboard binds
 # ifdef __linux__
 #  define KY_LEFT 65361
 #  define KY_RIGHT 65363
-#  define KY_A 0
-#  define KY_D 2
-#  define KY_S 1
-#  define KY_W 13
+#  define KY_A 97
+#  define KY_D 100
+#  define KY_S 115
+#  define KY_W 119
 
 # elif __APPLE__
 #  define KY_LEFT 123

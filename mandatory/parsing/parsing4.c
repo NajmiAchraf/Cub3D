@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:33:38 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/24 15:03:40 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/28 14:40:44 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ void	check_map_surrounded1(t_var *var, int i)
 void	check_map_surrounded(t_var *var)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
 	while (var->pars->map[i])
 	{
 		check_map_surrounded1(var, i);

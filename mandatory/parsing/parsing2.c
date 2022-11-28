@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sriyani <sriyani@student.42.fr>            +#+  +:+       +#+        */
+/*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/23 11:20:11 by sriyani           #+#    #+#             */
-/*   Updated: 2022/11/25 15:50:48 by sriyani          ###   ########.fr       */
+/*   Updated: 2022/11/28 14:40:05 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,9 @@ void	check_map(t_var *var)
 
 int	fill_map(t_var *var, int i, int len)
 {
-	int			j;
 	int			k;
 	static int	flag;
 
-	j = 0;
 	k = 0;
 	if (!flag)
 	{

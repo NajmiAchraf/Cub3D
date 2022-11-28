@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:45:27 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 18:09:20 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 14:58:23 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ static t_tex	*fill_texture(t_var *var, char *path)
 		tex = malloc(sizeof(t_tex));
 		tex->tex = mlx_xpm_file_to_image(var->lx->mlx, path, \
 		&tex->width, &tex->height);
-		tex->tex && (tex->ptr = mlx_get_data_addr(tex->tex, \
-		&tex->bpp, &tex->line_lenght, &tex->endian));
+		if (tex->tex)
+			tex->ptr = mlx_get_data_addr(tex->tex, \
+				&tex->bpp, &tex->line_lenght, &tex->endian);
 		if (!tex->tex || !tex->ptr)
 		{
-			tex->tex && (mlx_destroy_image(var->lx->mlx, tex->tex));
+			if (tex->tex)
+				mlx_destroy_image(var->lx->mlx, tex->tex);
 			free(tex);
 			return (NULL);
 		}

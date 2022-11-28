@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:50:20 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/28 13:44:48 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 15:04:01 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	draw_the_map(t_var *var)
 				&& ((fabs(var->ply->pos_y - y)) * SCALE) < POS_PLY)
 				draw_squar(var, (x - var->ply->pos_x) * SCALE + POS_PLY, \
 					(y - var->ply->pos_y) * SCALE + POS_PLY, BLUE);
-				x++;
+			x++;
 		}
 		y++;
 	}

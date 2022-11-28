@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 17:20:42 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/27 17:49:53 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/28 15:09:16 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static void	cub3d(t_var *var)
 	var->lx->addr = mlx_get_data_addr(var->lx->img, &var->lx->bits_per_pixel,
 			&var->lx->line_length, &var->lx->endian);
 	fill_textures(var);
-	mlx_hook(var->lx->win, ON_KEYDOWN, 0, downbind, var);
-	mlx_hook(var->lx->win, ON_KEYUP, 0, upbind, var);
+	mlx_hook(var->lx->win, ON_KEYDOWN, (1L<<0), downbind, var);
+	mlx_hook(var->lx->win, ON_KEYUP, (1L<<1), upbind, var);
 	mlx_hook(var->lx->win, ON_DESTROY, 0, xite, var);
 	mlx_loop_hook(var->lx->mlx, draw, var);
 	mlx_loop(var->lx->mlx);
