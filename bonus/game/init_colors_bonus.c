@@ -6,7 +6,7 @@
 /*   By: anajmi <anajmi@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 13:45:27 by anajmi            #+#    #+#             */
-/*   Updated: 2022/11/28 14:58:23 by anajmi           ###   ########.fr       */
+/*   Updated: 2022/11/29 17:25:02 by anajmi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ static t_tex	*fill_texture(t_var *var, char *path)
 		}
 		return (tex);
 	}
+	else
+		ft_error("xpm not found");
 	return (NULL);
 }
 
